@@ -8,5 +8,7 @@ namespace DemoApp.AppEntities
 {
     class Category
     {
+        //test _git 
+        public int CategoryID { get; set; }
     }
 }
