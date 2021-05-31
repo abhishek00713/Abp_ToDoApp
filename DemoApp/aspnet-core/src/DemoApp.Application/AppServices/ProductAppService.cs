@@ -27,13 +27,14 @@ namespace DemoApp.AppServices
         public async Task<ProductDto> CreateASync(CreateProductDto input)
         {
             Product products =
-               ObjectMapper.Map<CreateProductDto,Product>(input);
+               ObjectMapper.Map<CreateProductDto, Product>(input);
 
             var product = await _productRepository.InsertAsync(products);
 
 
 
             //return new ProductDto();
+            //for test commit
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
@@ -70,7 +71,7 @@ namespace DemoApp.AppServices
                     )
                 );
 
-            
+
 
             //return new PagedResultDto<ProductDto>(
             //    totalcount,
@@ -88,7 +89,7 @@ namespace DemoApp.AppServices
                     totalcount, productDtos
                 );
 
-           
+
 
             return result;
 
@@ -102,7 +103,7 @@ namespace DemoApp.AppServices
             Product products =
                ObjectMapper.Map<UpdateProductDto, Product>(input);
 
-            
+
 
             await _productRepository.UpdateAsync(product);
         }
