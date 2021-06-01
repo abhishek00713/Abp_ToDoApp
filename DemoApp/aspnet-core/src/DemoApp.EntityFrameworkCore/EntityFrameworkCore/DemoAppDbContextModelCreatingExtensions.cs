@@ -30,6 +30,27 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.Quantity).IsRequired();
                 b.Property(i => i.ProductType).IsRequired().HasMaxLength(100);
             });
+
+
+            builder.Entity<Category>(b =>
+            {
+                b.ToTable("Categories");
+                b.ConfigureByConvention();
+                b.Property(i => i.CategoryName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.Discontinued).IsRequired();
+
+                
+            });
+
+            builder.Entity<Status>(b =>
+            {
+                b.ToTable("Statuses");
+                b.ConfigureByConvention();
+                b.Property(i => i.StatusName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.Discontinued).IsRequired();
+
+
+            });
         }
     }
 }

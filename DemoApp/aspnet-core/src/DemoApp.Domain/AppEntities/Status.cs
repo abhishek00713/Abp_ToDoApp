@@ -7,12 +7,10 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace DemoApp.AppEntities
 {
-    public class Category : FullAuditedAggregateRoot<Guid>
+    public class Status : FullAuditedAggregateRoot<Guid>
     {
-        
-
-        public string CategoryName { get; set; }
+        public string StatusName { get; set; }
 
         public bool Discontinued { get; set; }
-    }   
+    }
 }

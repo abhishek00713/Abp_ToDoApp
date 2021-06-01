@@ -4,15 +4,17 @@ using DemoApp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppMigrationsDbContext))]
-    partial class DemoAppMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210601072048_Added_Categories")]
+    partial class Added_Categories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,65 +147,6 @@ namespace DemoApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("DemoApp.AppEntities.Status", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<bool>("Discontinued")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("StatusName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
