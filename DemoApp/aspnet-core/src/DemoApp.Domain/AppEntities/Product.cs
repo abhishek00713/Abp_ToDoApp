@@ -16,5 +16,8 @@ namespace DemoApp.AppEntities
         public int Quantity { get; set; }
         public string ProductType { get; set; }
 
+        //Final check
+        // with visual
+        
     }
 }
