@@ -11,6 +11,6 @@ namespace DemoApp.StatusDtos
 
         public bool Discontinued { get; set; }
 
-        //visual git check
+        //visual git check again
     }
 }
