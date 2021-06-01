@@ -75,7 +75,7 @@ namespace DemoApp.AppServices
                     )
                 );
 
-
+           //this line has problems??
 
             List<CategoryDto> categoryDtos =
                 ObjectMapper.Map<List<Category>, List<CategoryDto>>(categories);
