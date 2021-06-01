@@ -30,6 +30,7 @@ namespace DemoApp.AppServices
                ObjectMapper.Map<CreateProductDto, Product>(input);
 
             var product = await _productRepository.InsertAsync(products);
+
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
