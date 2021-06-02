@@ -38,6 +38,8 @@ namespace DemoApp.AppServices
         [Authorize]
         public async Task DeleteAsync(Guid id)
         {
+            //softdelete isdelete true
+
             await _categoryRepository.DeleteAsync(id);
         }
 
@@ -66,7 +68,10 @@ namespace DemoApp.AppServices
                 input.SkipCount,
                 input.MaxResultCount,
                 input.Sorting
+
                 );
+
+        
 
             var totalcount = await AsyncExecuter.CountAsync(
                 _categoryRepository.WhereIf(
