@@ -96,7 +96,7 @@ namespace DemoApp.AppServices
             var category = await _categoryRepository.GetAsync(id);
 
             category.CategoryName = input.CategoryName;
-            category.Discontinued = input.Discontinued;
+            
 
 
 

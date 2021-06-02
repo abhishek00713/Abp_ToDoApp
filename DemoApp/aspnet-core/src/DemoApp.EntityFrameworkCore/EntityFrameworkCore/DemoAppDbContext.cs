@@ -25,6 +25,11 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Priority> Priorities { get; set; }
+        public DbSet<Task1> Task1s { get; set; }
+
+
+        //public DbSet<ToDo> ToDos { get; set; }
 
        
 

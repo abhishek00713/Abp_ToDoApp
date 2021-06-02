@@ -9,7 +9,7 @@ namespace DemoApp.StatusDtos
     {
         public string StatusName { get; set; }
 
-        public bool Discontinued { get; set; }
+      
 
         //visual git check again
     }

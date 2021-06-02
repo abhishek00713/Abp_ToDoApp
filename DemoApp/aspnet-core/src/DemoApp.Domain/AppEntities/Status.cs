@@ -11,6 +11,6 @@ namespace DemoApp.AppEntities
     {
         public string StatusName { get; set; }
 
-        public bool Discontinued { get; set; }
+       
     }
 }

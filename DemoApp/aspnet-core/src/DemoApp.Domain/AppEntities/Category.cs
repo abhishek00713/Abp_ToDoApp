@@ -13,6 +13,6 @@ namespace DemoApp.AppEntities
 
         public string CategoryName { get; set; }
 
-        public bool Discontinued { get; set; }
+       
     }   
 }

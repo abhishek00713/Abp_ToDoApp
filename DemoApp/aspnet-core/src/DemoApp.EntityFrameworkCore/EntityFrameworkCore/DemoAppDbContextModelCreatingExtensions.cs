@@ -37,7 +37,7 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("Categories");
                 b.ConfigureByConvention();
                 b.Property(i => i.CategoryName).IsRequired().HasMaxLength(100);
-                b.Property(i => i.Discontinued).IsRequired();
+                
 
                 
             });
@@ -47,10 +47,45 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("Statuses");
                 b.ConfigureByConvention();
                 b.Property(i => i.StatusName).IsRequired().HasMaxLength(100);
-                b.Property(i => i.Discontinued).IsRequired();
+                
 
 
             });
+
+            builder.Entity<Priority>(b =>
+            {
+                b.ToTable("Priorities");
+                b.ConfigureByConvention();
+                b.Property(i => i.PriorityName).IsRequired().HasMaxLength(100);
+
+
+
+            });
+
+            builder.Entity<Task1>(b =>
+            {
+                b.ToTable("Task1s");
+                b.ConfigureByConvention();
+                b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
+
+
+
+            });
+
+            //builder.Entity<ToDo>(b =>
+            //{
+            //    b.ToTable("ToDos");
+            //    b.ConfigureByConvention();
+            //    b.Property(i => i.Date).IsRequired();
+            //    b.Property(i => i.AssignedBy).IsRequired();
+            //    b.Property(i => i.Remarks);
+            //    b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId).IsRequired();
+            //    b.HasOne<Status>().WithMany().HasForeignKey(x => x.StatusId).IsRequired();
+            //    b.HasOne<Status>().WithMany().HasForeignKey(x => x.StatusId).IsRequired();
+
+
+
+            //});
         }
     }
 }

@@ -92,7 +92,7 @@ namespace DemoApp.AppServices
             var status = await _statusRepository.GetAsync(id);
 
             status.StatusName = input.StatusName;
-            status.Discontinued = input.Discontinued;
+            
 
             await _statusRepository.UpdateAsync(status);
 

@@ -11,7 +11,6 @@ namespace DemoApp.StatusDtos
         [Required, MaxLength(100)]
         public string StatusName { get; set; }
 
-        [Required]
-        public bool Discontinued { get; set; }
+       
     }
 }

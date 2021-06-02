@@ -12,7 +12,6 @@ namespace DemoApp.CategoryDTOs
         [Required, MaxLength(100)]
         public string CategoryName { get; set; }
 
-        [Required]
-        public bool Discontinued { get; set; }
+       
     }
 }
