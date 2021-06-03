@@ -18,6 +18,7 @@ namespace DemoApp.AppServices
 
         public CategoryAppService(IRepository<Category, Guid> categoryRepository)
         {
+            //comment1
             _categoryRepository = categoryRepository;
         }
 
