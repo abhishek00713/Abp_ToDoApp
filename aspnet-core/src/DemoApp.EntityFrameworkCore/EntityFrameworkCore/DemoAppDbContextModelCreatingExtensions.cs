@@ -58,6 +58,13 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.PriorityName).IsRequired().HasMaxLength(100);
                 b.Property(i => i.Discontinued).IsRequired();
             });
+            builder.Entity<Task1>(b =>
+            {
+                b.ToTable("Tasks");
+                b.ConfigureByConvention();
+                b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.Discontinued).IsRequired();
+            });
         }
     }
 }

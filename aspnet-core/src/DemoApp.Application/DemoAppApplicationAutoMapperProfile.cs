@@ -4,6 +4,7 @@ using DemoApp.CategoryDTOs;
 using DemoApp.DTOs;
 using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
+using DemoApp.TaskDtos;
 
 namespace DemoApp
 {
@@ -33,6 +34,10 @@ namespace DemoApp
             CreateMap<Priority, GetPriorityListDto>();
             CreateMap<UpdatePriorityDto, Priority>();
 
+            CreateMap<Task1, TaskDto>();
+            CreateMap<CreateTaskDto, Task1>();
+            CreateMap<Task1, GetTaskListDto>();
+            CreateMap<UpdateTaskDto, Task1>();
         }
     }
 }

@@ -26,6 +26,7 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Category> Categories { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Priority> Priorities { get; set; }
+        public DbSet<Task1> Tasks { get; set; }
        
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
