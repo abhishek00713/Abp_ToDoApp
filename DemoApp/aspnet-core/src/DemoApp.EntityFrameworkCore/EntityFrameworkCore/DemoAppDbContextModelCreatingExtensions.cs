@@ -100,7 +100,7 @@ namespace DemoApp.EntityFrameworkCore
                 //  .HasForeignKey<Task1>(td => td.Id);
 
 
-                
+                //navigation property added
 
                 b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
                 b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
