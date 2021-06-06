@@ -13,6 +13,8 @@ namespace DemoApp.AppEntities
 
         public string CategoryName { get; set; }
 
-       
+        //public ToDo ToDo { get; set; }
+
+
     }   
 }

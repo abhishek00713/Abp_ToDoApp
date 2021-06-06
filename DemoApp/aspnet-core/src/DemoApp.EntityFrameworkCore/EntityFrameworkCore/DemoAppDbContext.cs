@@ -29,9 +29,9 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Task1> Task1s { get; set; }
 
 
-        //public DbSet<ToDo> ToDos { get; set; }
+        public DbSet<ToDo> ToDos { get; set; }
 
-       
+
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside DemoAppDbContextModelCreatingExtensions.ConfigureDemoApp

@@ -72,20 +72,47 @@ namespace DemoApp.EntityFrameworkCore
 
             });
 
-            //builder.Entity<ToDo>(b =>
-            //{
-            //    b.ToTable("ToDos");
-            //    b.ConfigureByConvention();
-            //    b.Property(i => i.Date).IsRequired();
-            //    b.Property(i => i.AssignedBy).IsRequired();
-            //    b.Property(i => i.Remarks);
-            //    b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId).IsRequired();
-            //    b.HasOne<Status>().WithMany().HasForeignKey(x => x.StatusId).IsRequired();
-            //    b.HasOne<Status>().WithMany().HasForeignKey(x => x.StatusId).IsRequired();
+            builder.Entity<ToDo>(b =>
+            {
+                b.ToTable("ToDos");
+                b.ConfigureByConvention();
+                b.Property(i => i.Date).IsRequired();
+                b.Property(i => i.AssignedBy).IsRequired();
+                b.Property(i => i.Remarks);
+
+                //b.HasMany<Category>(g => g.Categories)
+                //.WithOne(s => s.ToDo)
+                //.HasForeignKey(x => x.Id).IsRequired();
+
+
+                //b.HasMany<Status>(g => g.Statuses)
+                //.WithOne(s => s.ToDo)
+                //.HasForeignKey(x => x.Id).IsRequired();
+
+
+                //b.HasMany<Priority>(g => g.Priorities )
+                //.WithOne(s => s.ToDo)
+                //.HasForeignKey(x => x.Id).IsRequired();
+
+
+                //  b.HasOne<Task1>(g => g.todotask)
+                //  .WithOne(td => td.ToDo)
+                //  .HasForeignKey<Task1>(td => td.Id);
+
+
+                
+
+                b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
+                b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
+                b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
+                b.HasOne<Task1>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
+                //b.HasOne<Task1>().WithOne().IsRequired();
 
 
 
-            //});
+            });
+
+  
         }
     }
 }

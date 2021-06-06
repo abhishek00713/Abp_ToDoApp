@@ -2,7 +2,10 @@
 using DemoApp.AppEntities;
 using DemoApp.CategoryDTOs;
 using DemoApp.DTOs;
+using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
+using DemoApp.TaskDtos;
+using DemoApp.ToDoDtos;
 
 namespace DemoApp
 {
@@ -27,8 +30,21 @@ namespace DemoApp
             CreateMap<Status, GetStatusListDto>();
             CreateMap<UpdateStatusDto, Status>();
 
+            CreateMap<Priority, PriorityDto>();
+            CreateMap<CreatePriorityDto, Priority>();
+            CreateMap<Priority, GetPriorityListDto>();
+            CreateMap<UpdatePriorityDto, Priority>();
+
+            CreateMap<Task1, TaskDto>();
+            CreateMap<CreateTaskDto, Task1>();
+            CreateMap<Task1, GetTaskListDto>();
+            CreateMap<UpdateTaskDto, Task1>();
 
 
+            CreateMap<ToDo, ToDoDto>();
+            CreateMap<CreateToDoDto, ToDo>();
+            CreateMap<ToDo, GetToDoListDto>();
+            CreateMap<UpdateToDoDto, ToDo>();
 
 
         }

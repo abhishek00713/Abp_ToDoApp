@@ -10,6 +10,8 @@ namespace DemoApp.AppEntities
     public class Task1 : FullAuditedAggregateRoot<Guid>
     {
         public string TaskName { get; set; }
-       
+
+        //public ToDo ToDo { get; set; }
+
     }
 }

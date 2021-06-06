@@ -11,5 +11,7 @@ namespace DemoApp.AppEntities
     {
         public string PriorityName { get; set; }
 
+
+        //public ToDo ToDo { get; set; }
     }
 }

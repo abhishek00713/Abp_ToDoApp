@@ -11,6 +11,9 @@ namespace DemoApp.AppEntities
     {
         public string StatusName { get; set; }
 
-       
+        //public ToDo ToDo { get; set; }
+        //Reference navigation property in the dependent entity
+
+
     }
 }
