@@ -99,7 +99,7 @@ namespace DemoApp.EntityFrameworkCore
                 //  .WithOne(td => td.ToDo)
                 //  .HasForeignKey<Task1>(td => td.Id);
 
-                // no navigation property 
+               
                
 
                 b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
