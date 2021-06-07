@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Users;
 
@@ -38,6 +40,12 @@ namespace DemoApp.Users
 
         public virtual bool PhoneNumberConfirmed { get; private set; }
 
+
+        //Added by Chayan, the idea was to use AppUser as Foreign Key using Navigation Property
+        //This derived property need to be notmapped for that to implement
+        [NotMapped]
+        public override ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
         #endregion
 
         /* Add your own properties here. Example:
@@ -57,7 +65,7 @@ namespace DemoApp.Users
 
         private AppUser()
         {
-            
+
         }
     }
 }

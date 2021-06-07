@@ -1,4 +1,5 @@
 ﻿using DemoApp.AppEntities;
+using DemoApp.Users;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -37,9 +38,9 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("Categories");
                 b.ConfigureByConvention();
                 b.Property(i => i.CategoryName).IsRequired().HasMaxLength(100);
-                
 
-                
+
+
             });
 
             builder.Entity<Status>(b =>
@@ -47,7 +48,7 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("Statuses");
                 b.ConfigureByConvention();
                 b.Property(i => i.StatusName).IsRequired().HasMaxLength(100);
-                
+
 
 
             });
@@ -67,10 +68,32 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("Task1s");
                 b.ConfigureByConvention();
                 b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
-
-
-
             });
+
+
+            builder.Entity<DefinitionAttachment>(b =>
+            {
+                b.ToTable("DefinitionAttachments");
+                b.ConfigureByConvention();
+                b.Property(i => i.AttachmentName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.AttachmentFileURL).IsRequired().HasMaxLength(100);
+
+                //relationship with ToDo Schema Table
+                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+            });
+
+            builder.Entity<AssignedToUser>(b =>
+            {
+                b.ToTable("AssignedToUsers");
+                b.ConfigureByConvention();
+                b.Property(i => i.IsActive).IsRequired();
+
+                //relationship with ToDo Schema Table
+                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+                //relationship with AppUser Schema Table
+                b.HasOne(i => i.AbpUser).WithMany().HasForeignKey(t => t.UserId);
+            }
+            );
 
             builder.Entity<ToDo>(b =>
             {
@@ -80,38 +103,11 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.AssignedBy).IsRequired();
                 b.Property(i => i.Remarks);
 
-                //b.HasMany<Category>(g => g.Categories)
-                //.WithOne(s => s.ToDo)
-                //.HasForeignKey(x => x.Id).IsRequired();
-
-
-                //b.HasMany<Status>(g => g.Statuses)
-                //.WithOne(s => s.ToDo)
-                //.HasForeignKey(x => x.Id).IsRequired();
-
-
-                //b.HasMany<Priority>(g => g.Priorities )
-                //.WithOne(s => s.ToDo)
-                //.HasForeignKey(x => x.Id).IsRequired();
-
-
-                //  b.HasOne<Task1>(g => g.todotask)
-                //  .WithOne(td => td.ToDo)
-                //  .HasForeignKey<Task1>(td => td.Id);
-
-
-
                 b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
                 b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
                 b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
                 b.HasOne<Task1>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
-                //b.HasOne<Task1>().WithOne().IsRequired();
-
-
-
             });
-
-  
         }
     }
 }
