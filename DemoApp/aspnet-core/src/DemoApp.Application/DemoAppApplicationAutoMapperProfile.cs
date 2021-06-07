@@ -5,6 +5,7 @@ using DemoApp.DTOs;
 using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
 using DemoApp.TaskDtos;
+using DemoApp.ToDo_AssignedDtos;
 using DemoApp.ToDoDtos;
 
 namespace DemoApp
@@ -45,6 +46,11 @@ namespace DemoApp
             CreateMap<CreateToDoDto, ToDo>();
             CreateMap<ToDo, GetToDoListDto>();
             CreateMap<UpdateToDoDto, ToDo>();
+
+            CreateMap<ToDoAssignedTo, ToDoAssignedDto>();
+            CreateMap<CreateToDo_Assigned, ToDoAssignedTo>();
+            CreateMap<ToDoAssignedTo, GetToDo_Assigned>();
+            CreateMap<UpdateToDo_Assigned, ToDoAssignedTo>();
 
 
         }

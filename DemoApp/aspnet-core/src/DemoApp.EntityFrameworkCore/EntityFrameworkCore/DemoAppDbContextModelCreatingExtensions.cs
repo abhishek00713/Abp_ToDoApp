@@ -111,7 +111,20 @@ namespace DemoApp.EntityFrameworkCore
 
             });
 
-  
+            builder.Entity<ToDoAssignedTo>(b =>
+            {
+                b.ToTable("toDoAssignedTos");
+                b.ConfigureByConvention();
+                b.HasOne<ToDo>().WithMany().HasForeignKey(i => i.ToDoId).IsRequired();
+                b.Property(i => i.AssignedBy).IsRequired();
+                b.Property(i => i.AssignedTo).IsRequired();
+
+
+
+
+            });
+
+
         }
     }
 }

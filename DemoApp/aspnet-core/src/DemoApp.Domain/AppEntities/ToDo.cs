@@ -25,7 +25,7 @@ namespace DemoApp.AppEntities
         public Guid TaskId { get; set; }
 
 
-
+       
 
         public DateTime Date { get; set; }
 

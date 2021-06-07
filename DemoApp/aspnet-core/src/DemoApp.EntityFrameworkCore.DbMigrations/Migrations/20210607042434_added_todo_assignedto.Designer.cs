@@ -4,15 +4,17 @@ using DemoApp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppMigrationsDbContext))]
-    partial class DemoAppMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210607042434_added_todo_assignedto")]
+    partial class added_todo_assignedto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -28,8 +28,9 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Task1> Task1s { get; set; }
 
-
         public DbSet<ToDo> ToDos { get; set; }
+        public DbSet<ToDoAssignedTo> toDoAssignedTos { get; set; }
+
 
 
 
