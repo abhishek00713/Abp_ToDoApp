@@ -1,5 +1,6 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.IAppServices;
+using DemoApp.Permissions;
 using DemoApp.ToDoDtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -12,6 +13,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
+    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class ToDoAppService : DemoAppAppService, IToDoAppService
     {
         private readonly IRepository<ToDo, Guid> _todoRepository;
@@ -19,7 +21,7 @@ namespace DemoApp.AppServices
         {
             _todoRepository = todoRepository;
         }
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
         public async Task<ToDoDto> CreateASync(CreateToDoDto input)
         {
             ToDo todos =
@@ -33,17 +35,63 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<ToDo, ToDoDto>(todo);
         }
 
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
         public async Task DeleteAsync(Guid id)
         {
             await _todoRepository.DeleteAsync(id);
         }
 
-        [Authorize]
+        public async Task<PagedResultDto<ToDoDto>> GetAllListAsync(GetAllToDoListDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(ToDo.Id);
+            }
+
+            var queryable = await _todoRepository.WithDetailsAsync(
+                (t => t.Category),
+                (t => t.Priority),
+                (t => t.Status),
+                (t => t.Tasks)
+                );
+
+
+            //filter category
+            if (!(input.filterCategory.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterCategory.Contains(t.Category.CategoryName));
+            }
+            if (!(input.filterPriority.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterPriority.Contains(t.Priority.PriorityName));
+            }
+            if (!(input.filterStatus.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterStatus.Contains(t.Status.StatusName));
+            }
+            if (!(input.filterTask.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterTask.Contains(t.Tasks.TaskName));
+            }
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                queryable);
+
+            List<ToDoDto> toDos =
+                ObjectMapper.Map<List<ToDo>, List<ToDoDto>>(queryable.ToList());
+
+            PagedResultDto<ToDoDto> result = new PagedResultDto<ToDoDto>(
+                    totalcount, toDos
+                );
+
+
+
+            return result;
+        }
+
         public async Task<ToDoDto> GetAsync(Guid id)
         {
             ToDo toDo = await _todoRepository.GetAsync(id);
-
             return ObjectMapper.Map<ToDo, ToDoDto>(toDo);
         }
 
@@ -52,7 +100,7 @@ namespace DemoApp.AppServices
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(Task1.TaskName);
+                input.Sorting = nameof(ToDoDto.Date);
             }
 
             List<ToDo> todos = await _todoRepository.GetPagedListAsync(
@@ -83,10 +131,16 @@ namespace DemoApp.AppServices
             return result;
         }
 
-        [Authorize]
-        public Task UpdateAsync(Guid id, UpdateToDoDto input)
+        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        public async Task UpdateAsync(Guid id, UpdateToDoDto input)
         {
-            throw new NotImplementedException();
+            var toDos = await _todoRepository.GetAsync(id);
+            toDos.CategoryId = input.CategoryId;
+            toDos.StatusId = input.StatusId;
+            toDos.PriorityId = input.PriorityId;
+            toDos.TaskId = input.TaskId;
+            toDos.Date = input.Date;
+            await _todoRepository.UpdateAsync(toDos);
         }
     }
 }

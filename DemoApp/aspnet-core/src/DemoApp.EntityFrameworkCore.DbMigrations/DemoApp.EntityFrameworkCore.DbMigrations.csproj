@@ -8,6 +8,43 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210519033554_Initial.cs" />
+    <Compile Remove="Migrations\20210519033554_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20210519061848_AddsProducts.cs" />
+    <Compile Remove="Migrations\20210519061848_AddsProducts.Designer.cs" />
+    <Compile Remove="Migrations\20210602080325_added-category.cs" />
+    <Compile Remove="Migrations\20210602080325_added-category.Designer.cs" />
+    <Compile Remove="Migrations\20210602080722_added-status.cs" />
+    <Compile Remove="Migrations\20210602080722_added-status.Designer.cs" />
+    <Compile Remove="Migrations\20210602133032_added_priorities.cs" />
+    <Compile Remove="Migrations\20210602133032_added_priorities.Designer.cs" />
+    <Compile Remove="Migrations\20210602133940_added_task.cs" />
+    <Compile Remove="Migrations\20210602133940_added_task.Designer.cs" />
+    <Compile Remove="Migrations\20210604102450_added_todo.cs" />
+    <Compile Remove="Migrations\20210604102450_added_todo.Designer.cs" />
+    <Compile Remove="Migrations\20210606145945_InitialMigration.cs" />
+    <Compile Remove="Migrations\20210606145945_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20210607042337_InitialCreate.cs" />
+    <Compile Remove="Migrations\20210607042337_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210607062103_addsToDo.cs" />
+    <Compile Remove="Migrations\20210607062103_addsToDo.Designer.cs" />
+    <Compile Remove="Migrations\20210607120857_addsAssignedToUser.cs" />
+    <Compile Remove="Migrations\20210607120857_addsAssignedToUser.Designer.cs" />
+    <Compile Remove="Migrations\20210610102533_addsDefinitionAttachment.cs" />
+    <Compile Remove="Migrations\20210610102533_addsDefinitionAttachment.Designer.cs" />
+    <Compile Remove="Migrations\20210611114710_addsOrder.cs" />
+    <Compile Remove="Migrations\20210611114710_addsOrder.Designer.cs" />
+    <Compile Remove="Migrations\20210611114734_addsOrderLine.cs" />
+    <Compile Remove="Migrations\20210611114734_addsOrderLine.Designer.cs" />
+    <Compile Remove="Migrations\20210614052043_nav_prop_todo.cs" />
+    <Compile Remove="Migrations\20210614052043_nav_prop_todo.Designer.cs" />
+    <Compile Remove="Migrations\20210614070509_initial_migration_14JUN21.cs" />
+    <Compile Remove="Migrations\20210614070509_initial_migration_14JUN21.Designer.cs" />
+    <Compile Remove="Migrations\20210614071701_initial_migration__14JUN21.cs" />
+    <Compile Remove="Migrations\20210614071701_initial_migration__14JUN21.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DemoApp.EntityFrameworkCore\DemoApp.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
@@ -16,6 +53,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>compile; contentFiles; build; buildMultitargeting; buildTransitive; analyzers; native</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

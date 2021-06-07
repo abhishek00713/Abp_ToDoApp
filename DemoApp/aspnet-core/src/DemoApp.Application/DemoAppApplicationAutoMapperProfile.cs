@@ -46,6 +46,7 @@ namespace DemoApp
             CreateMap<ToDo, ToDoDto>();
             CreateMap<CreateToDoDto, ToDo>();
             CreateMap<ToDo, GetToDoListDto>();
+            CreateMap<ToDo, GetAllToDoListDto>();
             CreateMap<UpdateToDoDto, ToDo>();
 
             CreateMap<DefinitionAttachment, DefinitionAttachmentDto>();

@@ -1,6 +1,7 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.Users;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -103,11 +104,21 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.AssignedBy).IsRequired();
                 b.Property(i => i.Remarks);
 
-                b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
-                b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
-                b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
-                b.HasOne<Task1>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
+                b.HasOne<Category>(td => td.Category).WithMany(c => c.ToDos).HasForeignKey(i => i.CategoryId).IsRequired();
+                b.HasOne<Priority>(td => td.Priority).WithMany(p => p.ToDos).HasForeignKey(i => i.PriorityId).IsRequired();
+                b.HasOne<Task1>(td => td.Tasks).WithMany(t => t.ToDos).HasForeignKey(i => i.TaskId).IsRequired();
+                b.HasOne<Status>(td => td.Status).WithMany(s => s.ToDos).HasForeignKey(i => i.StatusId).IsRequired();
             });
+
+
+
+            var cascadeFks = builder.Model.GetEntityTypes().
+                SelectMany(t => t.GetForeignKeys())
+                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+            foreach (var fk in cascadeFks)
+                fk.DeleteBehavior = DeleteBehavior.Cascade;
+
+            ;
         }
     }
 }
