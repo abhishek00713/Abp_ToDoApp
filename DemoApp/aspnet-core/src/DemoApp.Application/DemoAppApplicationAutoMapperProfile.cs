@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DemoApp.AppEntities;
+using DemoApp.AssignedToUserDtos;
 using DemoApp.CategoryDTOs;
+using DemoApp.DefinitionAttachmentDtos;
 using DemoApp.DTOs;
 using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
@@ -13,7 +15,7 @@ namespace DemoApp
     {
         public DemoAppApplicationAutoMapperProfile()
         {
-            
+
             CreateMap<Product, ProductDto>();
             CreateMap<CreateProductDto, Product>();
             CreateMap<Product, GetProductListDto>();
@@ -45,6 +47,16 @@ namespace DemoApp
             CreateMap<CreateToDoDto, ToDo>();
             CreateMap<ToDo, GetToDoListDto>();
             CreateMap<UpdateToDoDto, ToDo>();
+
+            CreateMap<DefinitionAttachment, DefinitionAttachmentDto>();
+            CreateMap<CreateDefinitionAttachmentDto, DefinitionAttachment>();
+            CreateMap<DefinitionAttachment, GetDefinitionAttachmentListDto>();
+            CreateMap<UpdateDefinitionAttachmentDto, DefinitionAttachment>();
+
+            CreateMap<AssignedToUser, AssignedToUserDto>();
+            CreateMap<CreateAssignedToUserDto, AssignedToUser>();
+            CreateMap<AssignedToUser, GetAssignedToUserListDto>();
+            CreateMap<UpdateAssignedToUserDto, AssignedToUser>();
 
 
         }

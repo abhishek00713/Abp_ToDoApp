@@ -27,8 +27,9 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Task1> Task1s { get; set; }
+        public DbSet<DefinitionAttachment> DefinitionAttachments { get; set; }
 
-
+        public DbSet<AssignedToUser> AssignedToUsers { get; set; }
         public DbSet<ToDo> ToDos { get; set; }
 
 
@@ -52,7 +53,7 @@ namespace DemoApp.EntityFrameworkCore
             builder.Entity<AppUser>(b =>
             {
                 b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
-                
+
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 
