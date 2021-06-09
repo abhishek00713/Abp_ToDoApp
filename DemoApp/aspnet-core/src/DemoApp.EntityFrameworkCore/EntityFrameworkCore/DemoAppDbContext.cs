@@ -26,10 +26,10 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Category> Categories { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Priority> Priorities { get; set; }
-        public DbSet<Task1> Task1s { get; set; }
+        public DbSet<ToDoTask> ToDoTasks { get; set; }
 
         public DbSet<ToDo> ToDos { get; set; }
-        public DbSet<ToDoAssignedTo> toDoAssignedTos { get; set; }
+        public DbSet<ToDoAssignedTo> ToDoAssignedTos { get; set; }
 
 
 
@@ -56,6 +56,7 @@ namespace DemoApp.EntityFrameworkCore
                 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
+
 
                 /* Configure mappings for your additional properties
                  * Also see the DemoAppEfCoreEntityExtensionMappings class

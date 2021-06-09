@@ -22,6 +22,23 @@ namespace DemoApp.AppServices
         }
 
         [Authorize]
+        public async Task<ToDoAssignedDto> CreateASync(CreateToDo_Assigned input)
+        {
+           ToDoAssignedTo toDoAssignedTo =
+            ObjectMapper.Map<CreateToDo_Assigned, ToDoAssignedTo>(input);
+
+
+
+            var todoassign = await _todoAssignedtoRepository.InsertAsync(toDoAssignedTo);
+
+           
+
+
+
+            return ObjectMapper.Map<ToDoAssignedTo, ToDoAssignedDto>(todoassign);
+        }
+
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             await _todoAssignedtoRepository.DeleteAsync(id);
@@ -77,8 +94,8 @@ namespace DemoApp.AppServices
         {
             var todoassigned = await _todoAssignedtoRepository.GetAsync(id);
 
-            todoassigned.AssignedTo = input.AssignedTo;
-            todoassigned.ToDoId = input.ToDoId;
+            //todoassigned.AssignedTo = input.AssignedTo;
+            //todoassigned.ToDoId = input.ToDoId;
 
 
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Users;
 
@@ -37,6 +39,9 @@ namespace DemoApp.Users
         public virtual string PhoneNumber { get; private set; }
 
         public virtual bool PhoneNumberConfirmed { get; private set; }
+
+        //[NotMapped]
+        //public override ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         #endregion
 

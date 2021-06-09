@@ -21,45 +21,34 @@ namespace DemoApp.AppServices
 
         private readonly IRepository<ToDo, Guid> _todoRepository;
 
-        private readonly IRepository<AppUser, Guid> _abpRepository;
 
-        private readonly IRepository<ToDoAssignedTo, Guid> _todoassignedtoRepository;
         public ToDoAppService(IRepository<ToDo, Guid> todoRepository, ICurrentUser currentUser
-                                , IRepository<ToDoAssignedTo, Guid> todoassignedtoRepository
-                                , IRepository<AppUser, Guid> abpRepository
+                              
                     )
         {
             _todoRepository = todoRepository;
 
             _currentUser = currentUser;
 
-            _todoassignedtoRepository = todoassignedtoRepository;
-
-            _abpRepository = abpRepository;
 
         }
         [Authorize]
         public async Task<ToDoDto> CreateASync(CreateToDoDto input)
         {
+            
+            
+
             ToDo todos =
             ObjectMapper.Map<CreateToDoDto, ToDo>(input);
 
-
+            todos.Date = input.Date.Date;
+            todos.Time = input.Date.ToShortTimeString();
 
             var todo = await _todoRepository.InsertAsync(todos);
 
-            var user = _abpRepository.Where(x => x.Id == todo.AssignedBy )
-                        .Select(x=>x.Id).FirstOrDefault();
+            todo.AssignedBy = (Guid)_currentUser.Id;
 
 
-
-
-            ToDoAssignedTo tododoassigned = new ToDoAssignedTo();
-            tododoassigned.ToDoId = todo.Id;
-            tododoassigned.AssignedTo = user;
-            tododoassigned.AssignedBy = (Guid)_currentUser.Id;
-
-            await _todoassignedtoRepository.InsertAsync(tododoassigned);
 
 
 
@@ -85,7 +74,7 @@ namespace DemoApp.AppServices
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(Task1.TaskName);
+                input.Sorting = nameof(ToDoTask.TaskName);
             }
 
             List<ToDo> todos = await _todoRepository.GetPagedListAsync(

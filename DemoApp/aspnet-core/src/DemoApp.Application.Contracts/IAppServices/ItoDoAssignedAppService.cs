@@ -13,7 +13,7 @@ namespace DemoApp.IAppServices
         Task<ToDoAssignedDto> GetAsync(Guid id);
         Task<PagedResultDto<ToDoAssignedDto>> GetListAsync(GetToDo_Assigned input);
 
-        //Task<ToDoAssignedDto> CreateASync(CreateToDo_Assigned input);
+        Task<ToDoAssignedDto> CreateASync(CreateToDo_Assigned input);
         Task UpdateAsync(Guid id, UpdateToDo_Assigned input);
         Task DeleteAsync(Guid id);
     }

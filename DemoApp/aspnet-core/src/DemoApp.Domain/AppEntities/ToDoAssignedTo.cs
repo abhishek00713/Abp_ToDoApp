@@ -15,6 +15,6 @@ namespace DemoApp.AppEntities
 
         public Guid AssignedTo { get; set; }
 
-        public Guid AssignedBy { get; set; }
+
     }
 }

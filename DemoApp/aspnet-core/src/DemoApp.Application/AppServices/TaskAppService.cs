@@ -15,23 +15,23 @@ namespace DemoApp.AppServices
 {
     public class TaskAppService : DemoAppAppService, ITaskAppService
     {
-        private readonly IRepository<Task1, Guid> _taskRepository;
-        public TaskAppService(IRepository<Task1, Guid> taskRepository)
+        private readonly IRepository<ToDoTask, Guid> _taskRepository;
+        public TaskAppService(IRepository<ToDoTask, Guid> taskRepository)
         {
             _taskRepository = taskRepository;
         }
         [Authorize]
         public async Task<TaskDto> CreateASync(CreateTaskDto input)
         {
-            Task1 tasks =
-            ObjectMapper.Map<CreateTaskDto, Task1>(input);
+            ToDoTask tasks =
+            ObjectMapper.Map<CreateTaskDto, ToDoTask>(input);
 
 
 
             var task = await _taskRepository.InsertAsync(tasks);
 
 
-            return ObjectMapper.Map<Task1, TaskDto>(task);
+            return ObjectMapper.Map<ToDoTask, TaskDto>(task);
         }
         [Authorize]
         public async Task DeleteAsync(Guid id)
@@ -41,9 +41,9 @@ namespace DemoApp.AppServices
         [Authorize]
         public async Task<TaskDto> GetAsync(Guid id)
         {
-            Task1 task = await _taskRepository.GetAsync(id);
+            ToDoTask task = await _taskRepository.GetAsync(id);
 
-            return ObjectMapper.Map<Task1, TaskDto>(task);
+            return ObjectMapper.Map<ToDoTask, TaskDto>(task);
 
         }
         [Authorize]
@@ -51,10 +51,10 @@ namespace DemoApp.AppServices
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(Task1.TaskName);
+                input.Sorting = nameof(ToDoTask.TaskName);
             }
 
-            List<Task1> tasks = await _taskRepository.GetPagedListAsync(
+            List<ToDoTask> tasks = await _taskRepository.GetPagedListAsync(
 
                 input.SkipCount,
                 input.MaxResultCount,
@@ -71,7 +71,7 @@ namespace DemoApp.AppServices
 
 
             List<TaskDto> taskDtos =
-                ObjectMapper.Map<List<Task1>, List<TaskDto>>(tasks);
+                ObjectMapper.Map<List<ToDoTask>, List<TaskDto>>(tasks);
 
             PagedResultDto<TaskDto> result = new PagedResultDto<TaskDto>(
                     totalcount, taskDtos

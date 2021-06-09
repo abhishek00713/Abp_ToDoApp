@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DemoApp.Migrations
 {
-    public partial class added_todo : Migration
+    public partial class added_Todo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,7 @@ namespace DemoApp.Migrations
                     PriorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
                     AssignedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -51,9 +52,9 @@ namespace DemoApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ToDos_Task1s_TaskId",
+                        name: "FK_ToDos_ToDoTask_TaskId",
                         column: x => x.TaskId,
-                        principalTable: "Task1s",
+                        principalTable: "ToDoTask",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

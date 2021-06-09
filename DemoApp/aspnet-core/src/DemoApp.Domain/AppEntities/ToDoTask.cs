@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace DemoApp.AppEntities
 {
-    public class Task1 : FullAuditedAggregateRoot<Guid>
+    public class ToDoTask : FullAuditedAggregateRoot<Guid>
     {
         public string TaskName { get; set; }
 

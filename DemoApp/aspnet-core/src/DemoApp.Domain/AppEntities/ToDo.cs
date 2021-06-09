@@ -29,10 +29,14 @@ namespace DemoApp.AppEntities
 
         public DateTime Date { get; set; }
 
+        public String Time { get; set; }
+
         
 
         public Guid AssignedBy { get; set; }
 
         public string Remarks { get; set; }
+
+
     }
 }
