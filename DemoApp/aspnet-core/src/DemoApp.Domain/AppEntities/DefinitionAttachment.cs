@@ -10,8 +10,8 @@ namespace DemoApp.AppEntities
     public class DefinitionAttachment : FullAuditedAggregateRoot<Guid>
     {
         public Guid ToDoId { get; set; }
-        public string AttachmentName { get; set; }
-        public string AttachmentFileURL { get; set; }
+        public string Caption { get; set; }
+        public Guid FileName { get; set; }
 
         //Navigation Property
         public virtual ToDo ToDos { get; set; }
