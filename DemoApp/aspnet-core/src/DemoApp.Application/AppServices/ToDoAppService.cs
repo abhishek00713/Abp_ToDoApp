@@ -95,7 +95,6 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<ToDo, ToDoDto>(toDo);
         }
 
-        [Authorize]
         public async Task<PagedResultDto<ToDoDto>> GetListAsync(GetToDoListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())

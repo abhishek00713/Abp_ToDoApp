@@ -2,9 +2,23 @@
 {
     public static class DemoAppPermissions
     {
-        public const string GroupName = "DemoApp";
+        //Creating Permission
+        public const string GroupName_Define = "ToDo Task Management";
+        public const string GroupName_User = "ToDo User Update";
 
-        //Add your own permission names. Example:
-        //public const string MyPermission1 = GroupName + ".MyPermission1";
+        public static class DemoApp
+        {
+            //for maanger or admin permission to define ToDo Tasks
+            public const string Default_Define_ToDo = GroupName_Define + ".DemoApp";
+            public const string Create_Define_ToDo = Default_Define_ToDo + ".Create";
+            public const string Update_Define_ToDo = Default_Define_ToDo + ".Update";
+            public const string Delete_Define_ToDo = Default_Define_ToDo + ".Delete";
+
+            //for user permission to update ToDo Tasks
+            public const string Default_User_ToDo = GroupName_User + ".DemoApp";
+            public const string Create_User_ToDo = Default_User_ToDo + ".Create";
+            public const string Update_User_ToDo = Default_User_ToDo + ".Update";
+            public const string Delete_User_ToDo = Default_User_ToDo + ".Delete";
+        }
     }
 }
