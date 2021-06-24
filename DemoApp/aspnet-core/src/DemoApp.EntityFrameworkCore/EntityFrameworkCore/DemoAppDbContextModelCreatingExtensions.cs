@@ -75,8 +75,8 @@ namespace DemoApp.EntityFrameworkCore
             {
                 b.ToTable("DefinitionAttachments");
                 b.ConfigureByConvention();
-                b.Property(i => i.Caption).IsRequired().HasMaxLength(100);
-                b.Property(i => i.FileName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.AttachmentName).IsRequired().HasMaxLength(100);
+                b.Property(i => i.AttachmentFileURL).IsRequired().HasMaxLength(100);
 
                 //relationship with ToDo Schema Table
                 b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);

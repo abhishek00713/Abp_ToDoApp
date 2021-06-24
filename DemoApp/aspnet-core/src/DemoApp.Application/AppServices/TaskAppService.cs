@@ -1,6 +1,5 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.IAppServices;
-using DemoApp.Permissions;
 using DemoApp.TaskDtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -14,7 +13,6 @@ using Volo.Abp.Domain.Repositories;
 //Task
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class TaskAppService : DemoAppAppService, ITaskAppService
     {
         private readonly IRepository<Task1, Guid> _taskRepository;
@@ -22,7 +20,7 @@ namespace DemoApp.AppServices
         {
             _taskRepository = taskRepository;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
+        [Authorize]
         public async Task<TaskDto> CreateASync(CreateTaskDto input)
         {
             Task1 tasks =
@@ -35,12 +33,12 @@ namespace DemoApp.AppServices
 
             return ObjectMapper.Map<Task1, TaskDto>(task);
         }
-        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             await _taskRepository.DeleteAsync(id);
         }
-
+        [Authorize]
         public async Task<TaskDto> GetAsync(Guid id)
         {
             Task1 task = await _taskRepository.GetAsync(id);
@@ -48,7 +46,7 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<Task1, TaskDto>(task);
 
         }
-
+        [Authorize]
         public async Task<PagedResultDto<TaskDto>> GetListAsync(GetTaskListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
@@ -83,13 +81,13 @@ namespace DemoApp.AppServices
 
             return result;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        [Authorize]
         public async Task UpdateAsync(Guid id, UpdateTaskDto input)
         {
             var task = await _taskRepository.GetAsync(id);
 
             task.TaskName = input.TaskName;
-
+            
 
 
 

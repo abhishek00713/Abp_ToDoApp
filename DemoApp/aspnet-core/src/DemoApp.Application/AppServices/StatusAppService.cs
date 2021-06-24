@@ -1,7 +1,6 @@
 ﻿using DemoApp.AppEntities;
 
 using DemoApp.IAppServices;
-using DemoApp.Permissions;
 using DemoApp.StatusDtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -14,9 +13,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class StatusAppService : DemoAppAppService, IStatusAppService
     {
+
         private readonly IRepository<Status, Guid> _statusRepository;
         private readonly Status _statusManager;
 
@@ -25,14 +24,17 @@ namespace DemoApp.AppServices
             _statusRepository = statusRepository;
         }
 
+        [Authorize]
         public async Task<StatusDto> GetAsync(Guid id)
         {
             Status status = await _statusRepository.GetAsync(id);
 
-            return ObjectMapper.Map<Status, StatusDto>(status);
+          return  ObjectMapper.Map<Status, StatusDto>(status);
 
         }
 
+
+        [Authorize]
         public async Task<PagedResultDto<StatusDto>> GetListAsync(GetStatusListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
@@ -51,7 +53,7 @@ namespace DemoApp.AppServices
                 _statusRepository.WhereIf(
                     !input.Filter.IsNullOrWhiteSpace(),
                     Status => Status.StatusName.Contains(input.Filter)
-
+                            
                     )
                 );
 
@@ -70,7 +72,7 @@ namespace DemoApp.AppServices
         }
 
 
-        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
+        [Authorize]
         public async Task<StatusDto> CreateASync(CreateStatusDto input)
         {
             Status status = ObjectMapper.Map<CreateStatusDto, Status>(input);
@@ -84,21 +86,21 @@ namespace DemoApp.AppServices
         }
 
 
-        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        [Authorize]
         public async Task UpdateAsync(Guid id, UpdateStatusDto input)
         {
             var status = await _statusRepository.GetAsync(id);
 
             status.StatusName = input.StatusName;
-
+            
 
             await _statusRepository.UpdateAsync(status);
 
-
+        
         }
 
 
-        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             await _statusRepository.DeleteAsync(id);
