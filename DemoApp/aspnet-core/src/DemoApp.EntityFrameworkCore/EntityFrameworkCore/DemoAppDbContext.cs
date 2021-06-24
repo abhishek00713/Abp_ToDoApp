@@ -30,7 +30,15 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<DefinitionAttachment> DefinitionAttachments { get; set; }
 
         public DbSet<AssignedToUser> AssignedToUsers { get; set; }
+
         public DbSet<ToDo> ToDos { get; set; }
+
+        public DbSet<ToDoUserAttachment> ToDoUserAttachments { get; set; }
+        public DbSet<ToDoUserTask> ToDoUserTasks { get; set; }
+
+
+
+
 
 
 

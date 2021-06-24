@@ -108,6 +108,24 @@ namespace DemoApp.EntityFrameworkCore
                 b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
                 b.HasOne<Task1>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
             });
+
+
+            builder.Entity<ToDoUserTask>(b =>
+            {
+                b.ToTable("ToDoUserTasks");
+                b.ConfigureByConvention();
+                b.HasOne<ToDo>().WithMany().HasForeignKey(i => i.ToDoId).OnDelete(DeleteBehavior.Restrict).IsRequired(); 
+                b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).OnDelete(DeleteBehavior.Restrict).IsRequired(); 
+            });
+
+            builder.Entity<ToDoUserAttachment>(b =>
+            {
+                b.ToTable("ToDoUserAttachments");
+                b.ConfigureByConvention();
+                b.HasOne<ToDoUserTask>().WithMany().HasForeignKey(i => i.ToDOUserTaskId).IsRequired();
+                b.Property(i => i.AttachmentCaption).IsRequired().HasMaxLength(100);
+                b.Property(i => i.AttachmentFile).IsRequired().HasMaxLength(100);
+            });
         }
     }
 }

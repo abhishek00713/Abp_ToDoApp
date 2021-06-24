@@ -8,6 +8,8 @@ using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
 using DemoApp.TaskDtos;
 using DemoApp.ToDoDtos;
+using DemoApp.ToDoUserAttachmentDtos;
+using DemoApp.ToDoUserTaskDtos;
 
 namespace DemoApp
 {
@@ -58,6 +60,17 @@ namespace DemoApp
             CreateMap<AssignedToUser, GetAssignedToUserListDto>();
             CreateMap<UpdateAssignedToUserDto, AssignedToUser>();
 
+
+            CreateMap<ToDoUserAttachment, ToDoUserAttachmentDto>();
+            CreateMap<CreateToDoUserAttachmentDto, ToDoUserAttachment>();
+            CreateMap<ToDoUserAttachment, GetToDoUserAttachmentListDto>();
+            CreateMap<UpdateToDoUserAtatchmentDto, ToDoUserAttachment>();
+
+
+            CreateMap<ToDoUserTask, ToDoUserTaskDto>();
+            CreateMap<CreateToDoUserTaskDto, ToDoUserTask>();
+            CreateMap<ToDoUserTask, GetToDoUserTaskListDto>();
+            CreateMap<UpdateToDoUserTaskDto, ToDoUserTask>();
 
         }
     }
