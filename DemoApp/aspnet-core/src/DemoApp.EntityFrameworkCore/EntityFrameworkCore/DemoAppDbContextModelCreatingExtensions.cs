@@ -80,7 +80,7 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.FileName).IsRequired().HasMaxLength(100);
 
                 //relationship with ToDo Schema Table
-                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+                b.HasOne(da => da.ToDos).WithMany(td => td.DefinitionAttachments).HasForeignKey(da => da.ToDoId);
             });
 
             builder.Entity<AssignedToUser>(b =>
@@ -90,7 +90,7 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.IsActive).IsRequired();
 
                 //relationship with ToDo Schema Table
-                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+                b.HasOne(au => au.ToDos).WithMany(td=>td.AssignedToUsers).HasForeignKey(au => au.ToDoId);
                 //relationship with AppUser Schema Table
                 b.HasOne(i => i.AbpUser).WithMany().HasForeignKey(t => t.UserId);
             }
