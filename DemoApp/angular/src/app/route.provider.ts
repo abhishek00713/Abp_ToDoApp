@@ -15,6 +15,13 @@ function configureRoutes(routesService: RoutesService) {
         order: 1,
         layout: eLayoutType.application,
       },
+      {
+        path: '/',
+        name: '::Menu:ToDo',
+        iconClass: 'fas fa-list',
+        order: 2,
+        layout: eLayoutType.application,
+      },
     ]);
   };
 }

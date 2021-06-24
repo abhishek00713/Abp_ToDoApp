@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,12 @@ namespace DemoApp.AppEntities
     {
         public string StatusName { get; set; }
 
-        //public ToDo ToDo { get; set; }
-        //Reference navigation property in the dependent entity
+        public virtual ICollection<ToDo> ToDos { get; set; }
 
+        public Status()
+        {
+            ToDos = new HashSet<ToDo>();
+        }
 
     }
 }
