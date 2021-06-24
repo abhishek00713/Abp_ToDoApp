@@ -2,6 +2,8 @@
 using DemoApp.BlobFileSystem;
 using DemoApp.DefinitionAttachmentDtos;
 using DemoApp.IAppServices;
+using DemoApp.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,8 @@ using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
-    public class DefinitionAttachmentAppService : DemoAppAppService, IDefinitionAttachmentAppService
+    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
+    public class DefinitionAttachmentAppService : DemoAppAppService, IDefinitionAttachmentAppService, IBlobFileUpload
     {
         private readonly IRepository<DefinitionAttachment, Guid> _definitionattachmentRepository;
         private readonly IBlobContainer<ToDoDefinitionFileContainer> _fileContainer;
@@ -24,51 +27,128 @@ namespace DemoApp.AppServices
             _fileContainer = fileContainer;
         }
 
+
+
+        #region CRUD APIs
+
+        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
         public async Task<DefinitionAttachmentDto> CreateASync(CreateDefinitionAttachmentDto input)
         {
+            //create new guid for filename
+            var filename = Guid.NewGuid();
+            input.FileName = filename;
+
             DefinitionAttachment attachments =
                 ObjectMapper.Map<CreateDefinitionAttachmentDto, DefinitionAttachment>(input);
-
             //Upload file first
-            await SaveBlobAsync(input.BinaryFile, input.AttachmentFileURL);
+            await SaveBlobFileAsync(input.BinaryFile, input.FileName);
 
             //Push to DB
-            var attachment = await _definitionattachmentRepository.InsertAsync(attachments);
+            var createdAttachment = await _definitionattachmentRepository.InsertAsync(attachments);
 
-            return ObjectMapper.Map<DefinitionAttachment, DefinitionAttachmentDto>(attachment);
+            return ObjectMapper.Map<DefinitionAttachment, DefinitionAttachmentDto>(createdAttachment);
         }
 
-        public Task DeleteAsync(Guid id)
+        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var definitionAttachment = await _definitionattachmentRepository.FirstOrDefaultAsync(x => x.Id == id);
+            if (definitionAttachment != null)
+            {
+                await _definitionattachmentRepository.DeleteAsync(definitionAttachment);
+                return true;
+            }
+            else
+                return false;
         }
 
-        public Task<DefinitionAttachmentDto> GetAsync(Guid id)
+        public async Task<DefinitionAttachmentDto> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var definitionAttachment = await _definitionattachmentRepository.GetAsync(id);
+            return ObjectMapper.Map<DefinitionAttachment, DefinitionAttachmentDto>(definitionAttachment);
         }
 
-        public Task<PagedResultDto<DefinitionAttachmentDto>> GetListAsync(GetDefinitionAttachmentListDto input)
+        public async Task<PagedResultDto<DefinitionAttachmentDto>> GetListAsync(GetDefinitionAttachmentListDto input)
         {
-            throw new NotImplementedException();
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(DefinitionAttachment.Caption);
+            }
+
+            List<DefinitionAttachment> definitionAttachments = await _definitionattachmentRepository.GetPagedListAsync(
+
+                input.SkipCount,
+                input.MaxResultCount,
+                input.Sorting
+
+                );
+
+
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                _definitionattachmentRepository.WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    t => t.Caption.Contains(input.Filter)
+                    )
+                );
+
+
+
+            List<DefinitionAttachmentDto> definitionAttachmentDtos =
+                ObjectMapper.Map<List<DefinitionAttachment>, List<DefinitionAttachmentDto>>(definitionAttachments);
+
+            PagedResultDto<DefinitionAttachmentDto> result = new PagedResultDto<DefinitionAttachmentDto>(
+                    totalcount, definitionAttachmentDtos
+                );
+
+
+
+            return result;
         }
 
-        public Task UpdateAsync(Guid id, UpdateDefinitionAttachmentDto input)
+        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        public async Task<DefinitionAttachmentDto> UpdateAsync(Guid id, UpdateDefinitionAttachmentDto input)
         {
-            throw new NotImplementedException();
+            var attachmentDetail = ObjectMapper.Map<UpdateDefinitionAttachmentDto, DefinitionAttachment>(input);
+
+            attachmentDetail = await _definitionattachmentRepository.GetAsync(id);
+            attachmentDetail.Caption = input.Caption;
+
+            //upload new attachment
+            if (input.BinaryFile.Length > 0)
+            {
+                //delete the existing file
+                if (await DeleteBlobFileAsync(attachmentDetail.FileName))
+                {
+                    //if deleted, upload new file   
+                    await SaveBlobFileAsync(input.BinaryFile, attachmentDetail.FileName);
+                }
+            }
+
+            var updatedDetail = await _definitionattachmentRepository.UpdateAsync(attachmentDetail);
+            return ObjectMapper.Map<DefinitionAttachment, DefinitionAttachmentDto>(updatedDetail);
         }
 
+        #endregion
 
-        //Upload Definition File
-        public async Task SaveBlobAsync(byte[] bytes, string fname)
-        {            
-            await _fileContainer.SaveAsync(fname, bytes);
+
+        #region File Attachment Methods
+        //Upload Definition File        
+        public async Task SaveBlobFileAsync(byte[] bytes, Guid fname)
+        {
+            await _fileContainer.SaveAsync(fname.ToString(), bytes);
         }
 
-        //Get Definition File
-        public async Task<byte[]> GetBlobAsync(string fname)
-        {           
-            return await _fileContainer.GetAllBytesOrNullAsync(fname);
+        public async Task<byte[]> GetBlobFileAsync(Guid fname)
+        {
+            return await _fileContainer.GetAllBytesOrNullAsync(fname.ToString());
         }
+
+        public async Task<bool> DeleteBlobFileAsync(Guid fname)
+        {
+            return await _fileContainer.DeleteAsync(fname.ToString());
+        }
+        #endregion
+
     }
 }

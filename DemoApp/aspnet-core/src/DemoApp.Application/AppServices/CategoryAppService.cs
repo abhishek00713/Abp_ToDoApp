@@ -1,6 +1,7 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.CategoryDTOs;
 using DemoApp.IAppServices;
+using DemoApp.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
+    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class CategoryAppService : DemoAppAppService, ICategoryAppService
     {
         private readonly IRepository<Category, Guid> _categoryRepository;
@@ -21,13 +23,13 @@ namespace DemoApp.AppServices
             _categoryRepository = categoryRepository;
         }
 
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
         public async Task<CategoryDto> CreateASync(CreateCategoryDto input)
         {
             Category categories =
               ObjectMapper.Map<CreateCategoryDto, Category>(input);
 
-           
+
 
             var category = await _categoryRepository.InsertAsync(categories);
 
@@ -35,7 +37,7 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
         public async Task DeleteAsync(Guid id)
         {
             //softdelete isdelete true
@@ -43,17 +45,11 @@ namespace DemoApp.AppServices
             await _categoryRepository.DeleteAsync(id);
         }
 
-        [Authorize]
         public async Task<CategoryDto> GetAsync(Guid id)
         {
             Category category = await _categoryRepository.GetAsync(id);
-
             return ObjectMapper.Map<Category, CategoryDto>(category);
-
-            
         }
-
-        [Authorize]
 
         public async Task<PagedResultDto<CategoryDto>> GetListAsync(GetCategoryListDto input)
         {
@@ -71,7 +67,7 @@ namespace DemoApp.AppServices
 
                 );
 
-        
+
 
             var totalcount = await AsyncExecuter.CountAsync(
                 _categoryRepository.WhereIf(
@@ -94,17 +90,11 @@ namespace DemoApp.AppServices
             return result;
         }
 
-        [Authorize]
-
+        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
         public async Task UpdateAsync(Guid id, UpdateCategoryDto input)
         {
             var category = await _categoryRepository.GetAsync(id);
-
             category.CategoryName = input.CategoryName;
-            
-
-
-
             await _categoryRepository.UpdateAsync(category);
         }
     }
