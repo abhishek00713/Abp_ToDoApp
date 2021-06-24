@@ -1,6 +1,5 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.IAppServices;
-using DemoApp.Permissions;
 using DemoApp.PriorityDtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -13,16 +12,14 @@ using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
-    public class PriorityAppService : DemoAppAppService, IPriorityAppService
-    {
+    public class PriorityAppService : DemoAppAppService, IPriorityAppService    {
 
         private readonly IRepository<Priority, Guid> _priorityRepository;
         public PriorityAppService(IRepository<Priority, Guid> priorityRepository)
         {
             _priorityRepository = priorityRepository;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
+        [Authorize]
         public async Task<PriorityDto> CreateASync(CreatePriorityDto input)
         {
 
@@ -36,17 +33,19 @@ namespace DemoApp.AppServices
 
             return ObjectMapper.Map<Priority, PriorityDto>(priority);
         }
-        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             await _priorityRepository.DeleteAsync(id);
         }
+        [Authorize]
         public async Task<PriorityDto> GetAsync(Guid id)
         {
             Priority priority = await _priorityRepository.GetAsync(id);
 
             return ObjectMapper.Map<Priority, PriorityDto>(priority);
         }
+        [Authorize]
         public async Task<PagedResultDto<PriorityDto>> GetListAsync(GetPriorityListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
@@ -81,13 +80,13 @@ namespace DemoApp.AppServices
 
             return result;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        [Authorize]
         public async Task UpdateAsync(Guid id, UpdatePriorityDto input)
         {
             var priority = await _priorityRepository.GetAsync(id);
 
             priority.PriorityName = input.PriorityName;
-
+            
 
 
 
