@@ -5,6 +5,7 @@ import { StatusService, TaskService } from '../proxy/app-services';
 import { StatusDto } from '../proxy/status-dtos';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 
 
 
@@ -35,6 +36,7 @@ export class TodoComponent implements OnInit {
     public readonly list: ListService,
     private statusService: StatusService,
     private fb: FormBuilder,
+    private confirmation: ConfirmationService
 
   ) {
 
@@ -70,6 +72,14 @@ export class TodoComponent implements OnInit {
     });
   }
 
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure')
+      .subscribe((status) => {
+        if (status === Confirmation.Status.confirm) {
+          this.statusService.delete(id).subscribe(() => this.list.get());
+        }
+      });
+  }
 
   buildForm() {
     this.form = this.fb.group({
