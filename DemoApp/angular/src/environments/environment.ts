@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'DemoApp',
-    logoUrl: '',
+    name: 'Team Next ToDo ',
+    logoUrl: 'http://teamnext.com.np/Content/img/TN_Logo.png',
   },
   oAuthConfig: {
     issuer: 'https://localhost:44359',

@@ -13,6 +13,7 @@ import { NgxsModule } from '@ngxs/store';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeModule } from './home/home.module';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HomeModule,
     CoreModule.forRoot({
       environment,
       registerLocaleFn: registerLocale(),
