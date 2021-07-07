@@ -74,7 +74,7 @@ namespace DemoApp.AppServices
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(ToDoTask.TaskName);
+                input.Sorting = nameof(ToDo.CategoryId);
             }
 
             List<ToDo> todos = await _todoRepository.GetPagedListAsync(
@@ -106,9 +106,17 @@ namespace DemoApp.AppServices
         }
 
         [Authorize]
-        public Task UpdateAsync(Guid id, UpdateToDoDto input)
+        public async Task UpdateAsync(Guid id, UpdateToDoDto input)
         {
-            throw new NotImplementedException();
+
+            var toDos = await _todoRepository.GetAsync(id);
+            toDos.CategoryId = input.CategoryId;
+            toDos.StatusId = input.StatusId;
+            toDos.PriorityId = input.PriorityId;
+            toDos.TaskId = input.TaskId;
+            toDos.Date = input.Date;
+            toDos.Remarks = input.Remarks;
+            await _todoRepository.UpdateAsync(toDos);
         }
     }
 }

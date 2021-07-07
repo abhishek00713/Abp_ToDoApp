@@ -7,9 +7,15 @@
     "TaskName": "Task Name",
     "StatusName": "Status Name",
     "Menu:task": "Task",
+    "Menu:priority": "Priority",
+    "Menu:Category": "Task",
+    "Menu:todo": "To-Do",
     "Menu:status": "Status",
     "NewStatus": "Create New status",
-    "Edit":  "Edit Status"
+    "NewCategory": "Create New category",
+    "NewTask": "Create New task",
+    "NewPriority": "Create New priority"
+    
 
 
 
