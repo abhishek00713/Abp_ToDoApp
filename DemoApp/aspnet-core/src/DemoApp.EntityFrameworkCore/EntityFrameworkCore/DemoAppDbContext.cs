@@ -26,7 +26,8 @@ namespace DemoApp.EntityFrameworkCore
         public DbSet<Category> Categories { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Priority> Priorities { get; set; }
-        public DbSet<Task1> Task1s { get; set; }
+        //public DbSet<Task1> Task1s { get; set; }
+        public DbSet<ToDoTask> ToDoTasks { get; set; }
         public DbSet<DefinitionAttachment> DefinitionAttachments { get; set; }
 
         public DbSet<AssignedToUser> AssignedToUsers { get; set; }

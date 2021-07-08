@@ -39,10 +39,13 @@ namespace DemoApp
             CreateMap<Priority, GetPriorityListDto>();
             CreateMap<UpdatePriorityDto, Priority>();
 
-            CreateMap<Task1, TaskDto>();
-            CreateMap<CreateTaskDto, Task1>();
-            CreateMap<Task1, GetTaskListDto>();
-            CreateMap<UpdateTaskDto, Task1>();
+            
+
+
+            CreateMap<ToDoTask, TaskDto>();
+            CreateMap<CreateTaskDto, ToDoTask>();
+            CreateMap<ToDoTask, GetTaskListDto>();
+            CreateMap<UpdateTaskDto, ToDoTask>();
 
 
             CreateMap<ToDo, ToDoDto>();
