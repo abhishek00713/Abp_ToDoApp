@@ -23,13 +23,34 @@ function configureRoutes(routesService: RoutesService) {
         layout: eLayoutType.application,
       },
       {
+        path: '/categories',
+        name: 'Category ',
+        parentName: 'ToDo Setting',
+        iconClass: 'fa fa-wrench ng-star-inserted',
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/tasks',
+        name: 'Task ',
+        parentName: 'ToDo Setting',
+        iconClass: 'fa fa-wrench ng-star-inserted',
+        layout: eLayoutType.application,
+      },
+      {
         path: '/todos',
         name: 'Status ',
         parentName: 'ToDo Setting',
         iconClass: 'fa fa-wrench ng-star-inserted',
         layout: eLayoutType.application,
       },
-
+      
+      {
+        path: '/priorities',
+        name: 'Priority',
+        parentName: 'ToDo Setting',
+        iconClass: 'fa fa-wrench ng-star-inserted',
+        layout: eLayoutType.application,
+      },
     ]);
     
   };

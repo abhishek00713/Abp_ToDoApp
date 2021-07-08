@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TodoRoutingModule } from './todo-routing.module';
-import { TodoComponent } from './todo.component';
+import { TaskRoutingModule } from './task-routing.module';
+import { TaskComponent } from './task.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
+
 @NgModule({
-  declarations: [TodoComponent],
+  declarations: [TaskComponent],
   imports: [
-    TodoRoutingModule,
     SharedModule,
+    TaskRoutingModule,
     Ng2SearchPipeModule,
     FormsModule
   ]
 })
-export class TodoModule { }
+export class TaskModule { }

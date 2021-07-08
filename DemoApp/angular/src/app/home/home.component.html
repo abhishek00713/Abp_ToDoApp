@@ -1,2 +1,217 @@
-hello this is home
+
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          {{ '::Menu:todo' | abpLocalization }}
+        </h5>
+
+      </div>
+      <div class="text-right col col-md-6">
+        <div id="AbpContentToolbar" style="float : right">
+          <div class="col-auto px-1 pt-2 ng-star-inserted">
+
+
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="createToDo()">
+              <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
+              New To-Do
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="data-tables-table-filter" class="data-tables-filter">
+      <div class="input-group">
+        <!--<input type="search" class="form-control ng-pristine ng-valid ng-touched" placeholder="Search" ng-reflect-model="">-->
+
+        <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
+      </div>
+    </div>
+    <ngx-datatable [rows]="todo.items | filter:searchedKeyword" [count]="todo.totalCount" [list]="list" default>
+      <ngx-datatable-column prop="Category ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.category  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Status ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.status  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Priority ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.priority  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Task ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.task  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Date ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.date  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Remarks">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.remarks  }}
+         
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+      <ngx-datatable-column prop="Action ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div ngbDropdown container="body" class="d-inline-block">
+            <button class="btn btn-primary btn-sm dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    ngbDropdownToggle>
+              <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+            </button>
+            <div ngbDropdownMenu>
+              <button ngbDropdownItem (click)="editToDo(row.id)">
+                {{ '::Edit' | abpLocalization }}
+              </button>
+              <button ngbDropdownItem (click)="delete(row.id)">
+                {{ '::Delete' | abpLocalization }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+  </div>
+</div>
+
+
+
+
+
+<abp-modal [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+    <h3>{{ (selectedToDo.id ? '::Edit' : '::NewToDo') | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <!--Category-->
+      <div class="form-group" style="margin-bottom:0px !important">
+        <label for="category">Category</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+
+      <select class="custom-select" formControlName="categoryid">
+        <option [ngValue]="null" disabled>Select Category</option>
+
+        <option *ngFor="let category of categorylist | keyvalue" [ngValue]="category.value.id">{{category.value.Name}}</option>
+      </select>
+
+      <!--Status-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="status">Status</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="statusid">
+        <option [ngValue]="null" disabled>Select Status</option>
+
+        <option *ngFor="let status of statuslist | keyvalue" [ngValue]="status.value.id">{{status.value.Name}}</option>
+      </select>
+
+      <!--Priority-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="priority">Priority</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="priorityid">
+        <option [ngValue]="null" disabled>Select Priority</option>
+
+        <option *ngFor="let priority of prioritylist | keyvalue" [ngValue]="priority.value.id">{{priority.value.Name}}</option>
+      </select>
+
+      <!--Task-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="task">Task</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="taskid">
+        <option [ngValue]="null" disabled>Select Task</option>
+
+        <option *ngFor="let task of tasklist | keyvalue" [ngValue]="task.value.id">{{task.value.Name}}</option>
+      </select>
+
+
+      <!--Date-->
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+
+
+
+        <label> Date</label><span> * </span>
+        <!--<input #datepicker="ngbDatepicker"
+         class="form-control"
+         name="datepicker"
+         formControlName="date"
+         ngbDatepicker
+         (click)="datepicker.toggle()" />-->
+
+        <ejs-datetimepicker id='datetimepicker'formControlName="date" placeholder='Select date and time '  format='yyyy.MM.dd HH:mm'></ejs-datetimepicker>
+
+
+
+      </div>
+
+      <!--Remarks-->
+      <div class="form-group">
+        <label for="remarks">Remarks</label><span> * </span>
+        <input type="text" id="remarks" class="form-control" formControlName="remarks" autofocus />
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+      <i class="fa fa-check mr-1"></i>
+      {{ '::Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+
+
 

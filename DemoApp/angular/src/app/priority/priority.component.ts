@@ -1,84 +1,66 @@
 import { ListService, LIST_QUERY_DEBOUNCE_TIME, PagedResultDto } from '@abp/ng.core';
-import { query } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { StatusService, TaskService } from '../proxy/app-services';
-import { StatusDto } from '../proxy/status-dtos';
+import { PriorityDto } from '../proxy/priority-dtos';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
-
-
-
+import { PriorityService } from '../proxy/app-services';
 
 @Component({
-
   providers: [
-    
+
     ListService,
 
-  
+
     { provide: LIST_QUERY_DEBOUNCE_TIME, useValue: 500 },
   ],
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.scss']
+  selector: 'app-priority',
+  templateUrl: './priority.component.html',
+  styleUrls: ['./priority.component.scss']
 })
-
-export class TodoComponent implements OnInit {
-
+export class PriorityComponent implements OnInit {
+ 
   searchedKeyword: string;
 
-  status = { items: [], totalCount: 0 } as PagedResultDto<StatusDto>;
+  priority = { items: [], totalCount: 0 } as PagedResultDto<PriorityDto>;
   closeResult = '';
   form: FormGroup;
-  selectedStatus = {} as StatusDto;
+  selectedPriority = {} as PriorityDto;
   isModalOpen = false;
-  statuslist = [];
+
 
   constructor(private modalService: NgbModal,
     public readonly list: ListService,
-    private statusService: StatusService,
+    private priorityService: PriorityService,
     private fb: FormBuilder,
     private confirmation: ConfirmationService
 
   ) {
-    
+
   }
-  
 
 
-
-  ngOnInit() {
-    
-  
-   const statusStreamCreator = (query) => this.statusService.getList(query);
+ ngOnInit() {
+   const statusStreamCreator = (query) => this.priorityService.getList(query);
   
   
    this.list.hookToQuery(statusStreamCreator).subscribe((response) => {
-     for (let i = 0; i < response.totalCount; i++) {
-
-
-       this.statuslist.push({
-         id: response.items[i].id,
-         Name: response.items[i].statusName
-       });
-
-     }
-
-
-      this.status = response;
+  
+     this.priority = response;
     });
-    console.log("list", this.list);
+
+
+
   }
 
-  createStatus() {
-    this.selectedStatus = {} as StatusDto;
+  createPriority() {
+    this.selectedPriority = {} as PriorityDto;
     this.buildForm();
     this.isModalOpen = true;
   }
-  editStatus(id: string) {
-    this.statusService.get(id).subscribe((status) => {
-      this.selectedStatus = status;
+  editPriority(id: string) {
+    this.priorityService.get(id).subscribe((priority) => {
+      this.selectedPriority = priority;
       this.buildForm();
       this.isModalOpen = true;
       
@@ -89,14 +71,14 @@ export class TodoComponent implements OnInit {
     this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure')
       .subscribe((status) => {
         if (status === Confirmation.Status.confirm) {
-          this.statusService.delete(id).subscribe(() => this.list.get());
+          this.priorityService.delete(id).subscribe(() => this.list.get());
         }
       });
   }
 
   buildForm() {
     this.form = this.fb.group({
-      statusName: [this.selectedStatus.statusName , Validators.required],
+      priorityName: [this.selectedPriority.priorityName , Validators.required],
      
     });
     
@@ -106,29 +88,23 @@ export class TodoComponent implements OnInit {
       return;
     }
 
-    if (this.selectedStatus.id) {
-      this.statusService
-        .update(this.selectedStatus.id, this.form.value)
+    if (this.selectedPriority.id) {
+      this.priorityService
+        .update(this.selectedPriority.id, this.form.value)
         .subscribe(() => {
           this.isModalOpen = false;
           this.form.reset();
           this.list.get();
-        
-
         });
     } else {
       
-      this.statusService.createASyncByInput(this.form.value).subscribe(() => {
+      this.priorityService.createASyncByInput(this.form.value).subscribe(() => {
         this.isModalOpen = false;
         this.form.reset();
         this.list.get();
-       
       });
     }
-
-  
   }
 
+
 }
-
-

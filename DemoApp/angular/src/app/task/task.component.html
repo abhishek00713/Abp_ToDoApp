@@ -5,18 +5,18 @@
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">
-          {{ '::Menu:status' | abpLocalization }}
+          {{ '::Menu:task' | abpLocalization }}
         </h5>
-        
+
       </div>
       <div class="text-right col col-md-6">
         <div id="AbpContentToolbar" style="float : right">
           <div class="col-auto px-1 pt-2 ng-star-inserted">
-            
 
-            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="createStatus()">
+
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="createTask()">
               <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
-              New Status
+              New Task
             </button>
 
           </div>
@@ -29,19 +29,16 @@
     <div id="data-tables-table-filter" class="data-tables-filter">
       <div class="input-group">
         <!--<input type="search" class="form-control ng-pristine ng-valid ng-touched" placeholder="Search" ng-reflect-model="">-->
-
         <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
       </div>
-
-  
     </div>
-    <ngx-datatable [rows]="status.items | filter:searchedKeyword" [count]="status.totalCount" [list]="list" default>
-      
-      <ngx-datatable-column prop="Status Name">
-        <ng-template let-row="row"  ngx-datatable-cell-template>
-          {{ row.statusName  }} 
+    <ngx-datatable [rows]="task.items  | filter:searchedKeyword" [count]="task.totalCount" [list]="list" default>
+
+      <ngx-datatable-column prop="Task Name">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.taskName  }}
           <div style="float:right; cursor:pointer">
-            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="editStatus(row.id)">
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="editTask(row.id)">
               <i class="mr-1" ng-reflect-ng-class=""></i>
               Edit
             </button>
@@ -51,7 +48,7 @@
             </button>
           </div>
         </ng-template>
-       
+        >
       </ngx-datatable-column>
 
     </ngx-datatable>
@@ -62,17 +59,17 @@
 
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
-    <h3>{{ (selectedStatus.id ? '::Edit' : '::NewStatus') | abpLocalization }}</h3>
+    <h3>{{ (selectedTask.id ? '::Edit' : '::NewTask') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-group">
-        <label for="author-name">Status Name</label><span> * </span>
-        <input type="text" id="author-name" class="form-control" formControlName="statusName" autofocus />
+        <label for="author-name">Task Name</label><span> * </span>
+        <input type="text" id="author-name" class="form-control" formControlName="taskName" autofocus />
       </div>
 
-      
+
     </form>
   </ng-template>
 

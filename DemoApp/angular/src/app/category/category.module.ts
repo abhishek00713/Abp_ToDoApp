@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { TodoRoutingModule } from './todo-routing.module';
-import { TodoComponent } from './todo.component';
+
+import { CategoryRoutingModule } from './category-routing.module';
+import { CategoryComponent } from './category.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
+
 @NgModule({
-  declarations: [TodoComponent],
+  declarations: [CategoryComponent],
   imports: [
-    TodoRoutingModule,
     SharedModule,
+    CategoryRoutingModule,
     Ng2SearchPipeModule,
     FormsModule
   ]
 })
-export class TodoModule { }
+export class CategoryModule { }
