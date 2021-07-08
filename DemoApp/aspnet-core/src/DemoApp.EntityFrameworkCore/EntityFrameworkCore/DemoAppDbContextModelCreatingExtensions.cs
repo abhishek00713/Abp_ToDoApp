@@ -63,9 +63,9 @@ namespace DemoApp.EntityFrameworkCore
 
             });
 
-            builder.Entity<Task1>(b =>
+            builder.Entity<ToDoTask>(b =>
             {
-                b.ToTable("Task1s");
+                b.ToTable("ToDoTask");
                 b.ConfigureByConvention();
                 b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
             });
@@ -100,14 +100,17 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("ToDos");
                 b.ConfigureByConvention();
                 b.Property(i => i.Date).IsRequired();
+                b.Property(i => i.Time).IsRequired();
                 b.Property(i => i.AssignedBy).IsRequired();
+
                 b.Property(i => i.Remarks);
 
                 b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
                 b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
                 b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
-                b.HasOne<Task1>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
-            });
+                b.HasOne<ToDoTask>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
+                //b.HasOne<Volo.Abp.Identity.IdentityUser>().WithMany().HasForeignKey(i => i.AssignedBy).IsRequired();
+                //b.HasOne<Task1>().WithOne().IsRequired();
 
 
             builder.Entity<ToDoUserTask>(b =>
@@ -126,6 +129,28 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.AttachmentCaption).IsRequired().HasMaxLength(100);
                 b.Property(i => i.AttachmentFile).IsRequired().HasMaxLength(100);
             });
+
+            builder.Entity<ToDoAssignedTo>(b =>
+            {
+                b.ToTable("ToDoAssignedTos");
+
+
+                b.ConfigureByConvention();
+
+                b.HasOne<ToDo>().WithMany().HasForeignKey(i => i.ToDoId).IsRequired();
+                b.Property(i => i.AssignedTo).IsRequired();
+
+                //b.HasOne<Volo.Abp.Identity.IdentityUser>().WithMany().HasForeignKey(i => i.AssignedTo);
+
+
+
+
+
+
+
+            });
+
+
         }
     }
 }

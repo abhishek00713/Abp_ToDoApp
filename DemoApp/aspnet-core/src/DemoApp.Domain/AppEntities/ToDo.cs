@@ -14,8 +14,19 @@ namespace DemoApp.AppEntities
         public Guid StatusId { get; set; }
         public Guid PriorityId { get; set; }
         public Guid TaskId { get; set; }
+
+
+       
+
         public DateTime Date { get; set; }
+
+        public String Time { get; set; }
+
+        
+
         public Guid AssignedBy { get; set; }
         public string Remarks { get; set; }
+
+
     }
 }

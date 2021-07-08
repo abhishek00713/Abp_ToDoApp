@@ -24,6 +24,7 @@ namespace DemoApp.ToDoDtos
         [Required]
         public Guid TaskId { get; set; }
 
+
         // public ICollection<CategoryDto> Categories { get; set; }
 
         //[Required]
@@ -38,7 +39,10 @@ namespace DemoApp.ToDoDtos
         [Required]
         public DateTime Date { get; set; }
 
+
+        
         [Required]
+       
         public Guid AssignedBy { get; set; }
 
         public string Remarks { get; set; }

@@ -17,6 +17,9 @@ namespace DemoApp.ToDoDtos
         public Guid PriorityId { get; set; }
         public Guid TaskId { get; set; }
 
+      
+
+
         //public ICollection<CategoryDto> Categories { get; set; }
         //public ICollection<StatusDto> Statuses { get; set; }
         //public ICollection<PriorityDto> Priorities { get; set; }

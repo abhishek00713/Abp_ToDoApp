@@ -25,6 +25,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
+  { path: 'todos', loadChildren: () => import('./todo/todo.module').then(m => m.TodoModule) },
+  { path: 'tasks', loadChildren: () => import('./task/task.module').then(m => m.TaskModule) },
+  { path: 'categories', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule) },
+  { path: 'priorities', loadChildren: () => import('./priority/priority.module').then(m => m.PriorityModule) },
+  
+
 ];
 
 @NgModule({
