@@ -3,8 +3,10 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\home"
+    "\\src\\app\\home",
+    "\\src\\app\\proxy",
+    "\\src\\app\\todo"
   ],
-  "SelectedNode": "\\src\\app\\home\\home.component.ts",
+  "SelectedNode": "\\src\\app\\home\\home.component.html",
   "PreviewInSolutionExplorer": false
 }

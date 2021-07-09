@@ -92,6 +92,11 @@
               <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
             </button>
             <div ngbDropdownMenu>
+
+              <button ngbDropdownItem (click)="editToDo(row.id)">
+               Add Files
+              </button>
+
               <button ngbDropdownItem (click)="editToDo(row.id)">
                 {{ '::Edit' | abpLocalization }}
               </button>

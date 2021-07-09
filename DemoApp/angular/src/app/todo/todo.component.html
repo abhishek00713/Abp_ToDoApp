@@ -33,13 +33,36 @@
         <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
       </div>
 
-  
+
     </div>
+
+    <!--<p-table [value]="status" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Status Name</th>
+          
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>{{ status.statusName  }}</td>
+          
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+      </ng-template>
+    </p-table>-->
+
     <ngx-datatable [rows]="status.items | filter:searchedKeyword" [count]="status.totalCount" [list]="list" default>
-      
+
       <ngx-datatable-column prop="Status Name">
-        <ng-template let-row="row"  ngx-datatable-cell-template>
-          {{ row.statusName  }} 
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.statusName  }}
           <div style="float:right; cursor:pointer">
             <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="editStatus(row.id)">
               <i class="mr-1" ng-reflect-ng-class=""></i>
@@ -51,7 +74,7 @@
             </button>
           </div>
         </ng-template>
-       
+
       </ngx-datatable-column>
 
     </ngx-datatable>
