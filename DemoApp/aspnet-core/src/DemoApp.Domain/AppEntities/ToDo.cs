@@ -14,19 +14,17 @@ namespace DemoApp.AppEntities
         public Guid StatusId { get; set; }
         public Guid PriorityId { get; set; }
         public Guid TaskId { get; set; }
-
-
-       
-
         public DateTime Date { get; set; }
-
-        public String Time { get; set; }
-
-        
-
         public Guid AssignedBy { get; set; }
         public string Remarks { get; set; }
 
 
+        //Navigation Property
+        public virtual Category Category { get; set; }
+        public virtual Priority Priority { get; set; }
+        public virtual Status Status { get; set; }
+        public virtual Task1 Tasks { get; set; }
+        public virtual ICollection<DefinitionAttachment> DefinitionAttachments { get; set; }
+        public virtual ICollection<AssignedToUser> AssignedToUsers { get; set; }
     }
 }

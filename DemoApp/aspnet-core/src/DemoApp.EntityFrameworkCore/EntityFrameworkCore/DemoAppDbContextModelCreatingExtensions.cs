@@ -1,6 +1,7 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.Users;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -63,9 +64,9 @@ namespace DemoApp.EntityFrameworkCore
 
             });
 
-            builder.Entity<ToDoTask>(b =>
+            builder.Entity<Task1>(b =>
             {
-                b.ToTable("ToDoTask");
+                b.ToTable("Task1s");
                 b.ConfigureByConvention();
                 b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
             });
@@ -75,11 +76,11 @@ namespace DemoApp.EntityFrameworkCore
             {
                 b.ToTable("DefinitionAttachments");
                 b.ConfigureByConvention();
-                b.Property(i => i.AttachmentName).IsRequired().HasMaxLength(100);
-                b.Property(i => i.AttachmentFileURL).IsRequired().HasMaxLength(100);
+                b.Property(i => i.Caption).IsRequired().HasMaxLength(100);
+                b.Property(i => i.FileName).IsRequired().HasMaxLength(100);
 
                 //relationship with ToDo Schema Table
-                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+                b.HasOne(i => i.ToDos).WithMany(j=>j.DefinitionAttachments).HasForeignKey(t => t.ToDoId);
             });
 
             builder.Entity<AssignedToUser>(b =>
@@ -100,19 +101,15 @@ namespace DemoApp.EntityFrameworkCore
                 b.ToTable("ToDos");
                 b.ConfigureByConvention();
                 b.Property(i => i.Date).IsRequired();
-                b.Property(i => i.Time).IsRequired();
                 b.Property(i => i.AssignedBy).IsRequired();
-
                 b.Property(i => i.Remarks);
 
-                b.HasOne<Category>().WithMany().HasForeignKey(i => i.CategoryId).IsRequired();
-                b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).IsRequired();
-                b.HasOne<Priority>().WithMany().HasForeignKey(i => i.PriorityId).IsRequired();
-                b.HasOne<ToDoTask>().WithMany().HasForeignKey(i => i.TaskId).IsRequired();
-                //b.HasOne<Volo.Abp.Identity.IdentityUser>().WithMany().HasForeignKey(i => i.AssignedBy).IsRequired();
-                //b.HasOne<Task1>().WithOne().IsRequired();
-
+                b.HasOne<Category>(td => td.Category).WithMany(c => c.ToDos).HasForeignKey(i => i.CategoryId).IsRequired();
+                b.HasOne<Priority>(td => td.Priority).WithMany(p => p.ToDos).HasForeignKey(i => i.PriorityId).IsRequired();
+                b.HasOne<Task1>(td => td.Tasks).WithMany(t => t.ToDos).HasForeignKey(i => i.TaskId).IsRequired();
+                b.HasOne<Status>(td => td.Status).WithMany(s => s.ToDos).HasForeignKey(i => i.StatusId).IsRequired();
             });
+
 
             builder.Entity<ToDoUserTask>(b =>
             {
@@ -131,27 +128,14 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.AttachmentFile).IsRequired().HasMaxLength(100);
             });
 
-            builder.Entity<ToDoAssignedTo>(b =>
-            {
-                b.ToTable("ToDoAssignedTos");
 
+            var cascadeFks = builder.Model.GetEntityTypes().
+               SelectMany(t => t.GetForeignKeys())
+               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+            foreach (var fk in cascadeFks)
+                fk.DeleteBehavior = DeleteBehavior.Cascade;
 
-                b.ConfigureByConvention();
-
-                b.HasOne<ToDo>().WithMany().HasForeignKey(i => i.ToDoId).IsRequired();
-                b.Property(i => i.AssignedTo).IsRequired();
-
-                //b.HasOne<Volo.Abp.Identity.IdentityUser>().WithMany().HasForeignKey(i => i.AssignedTo);
-
-
-
-
-
-
-
-            });
-
-
+            ;
         }
     }
 }

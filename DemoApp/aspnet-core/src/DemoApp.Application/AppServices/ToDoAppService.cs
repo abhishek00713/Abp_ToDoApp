@@ -1,7 +1,7 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.IAppServices;
+using DemoApp.Permissions;
 using DemoApp.ToDoDtos;
-using DemoApp.Users;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -10,71 +10,96 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Users;
 
 namespace DemoApp.AppServices
 {
+    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class ToDoAppService : DemoAppAppService, IToDoAppService
     {
-
-        private readonly ICurrentUser _currentUser;
-
         private readonly IRepository<ToDo, Guid> _todoRepository;
-
-
-        public ToDoAppService(IRepository<ToDo, Guid> todoRepository, ICurrentUser currentUser
-                              
-                    )
+        public ToDoAppService(IRepository<ToDo, Guid> todoRepository)
         {
             _todoRepository = todoRepository;
-
-            _currentUser = currentUser;
-
-
         }
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
         public async Task<ToDoDto> CreateASync(CreateToDoDto input)
         {
-            
-            
-
             ToDo todos =
             ObjectMapper.Map<CreateToDoDto, ToDo>(input);
 
-            todos.Date = input.Date.Date;
-            todos.Time = input.Date.ToShortTimeString();
+
 
             var todo = await _todoRepository.InsertAsync(todos);
-
-            todo.AssignedBy = (Guid)_currentUser.Id;
-
-
-
 
 
             return ObjectMapper.Map<ToDo, ToDoDto>(todo);
         }
 
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
         public async Task DeleteAsync(Guid id)
         {
             await _todoRepository.DeleteAsync(id);
         }
 
-        [Authorize]
+        public async Task<PagedResultDto<ToDoDto>> GetAllListAsync(GetAllToDoListDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(ToDo.Id);
+            }
+
+            var queryable = await _todoRepository.WithDetailsAsync(
+                (t => t.Category),
+                (t => t.Priority),
+                (t => t.Status),
+                (t => t.Tasks)
+                );
+
+
+            //filter category
+            if (!(input.filterCategory.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterCategory.Contains(t.Category.CategoryName));
+            }
+            if (!(input.filterPriority.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterPriority.Contains(t.Priority.PriorityName));
+            }
+            if (!(input.filterStatus.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterStatus.Contains(t.Status.StatusName));
+            }
+            if (!(input.filterTask.IsNullOrWhiteSpace()))
+            {
+                queryable = queryable.Where(t => input.filterTask.Contains(t.Tasks.TaskName));
+            }
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                queryable);
+
+            List<ToDoDto> toDos =
+                ObjectMapper.Map<List<ToDo>, List<ToDoDto>>(queryable.ToList());
+
+            PagedResultDto<ToDoDto> result = new PagedResultDto<ToDoDto>(
+                    totalcount, toDos
+                );
+
+
+
+            return result;
+        }
+
         public async Task<ToDoDto> GetAsync(Guid id)
         {
             ToDo toDo = await _todoRepository.GetAsync(id);
-
             return ObjectMapper.Map<ToDo, ToDoDto>(toDo);
         }
 
-        [Authorize]
         public async Task<PagedResultDto<ToDoDto>> GetListAsync(GetToDoListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(ToDo.CategoryId);
+                input.Sorting = nameof(ToDoDto.Date);
             }
 
             List<ToDo> todos = await _todoRepository.GetPagedListAsync(
@@ -105,17 +130,15 @@ namespace DemoApp.AppServices
             return result;
         }
 
-        [Authorize]
+        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
         public async Task UpdateAsync(Guid id, UpdateToDoDto input)
         {
-
             var toDos = await _todoRepository.GetAsync(id);
             toDos.CategoryId = input.CategoryId;
             toDos.StatusId = input.StatusId;
             toDos.PriorityId = input.PriorityId;
             toDos.TaskId = input.TaskId;
             toDos.Date = input.Date;
-            toDos.Remarks = input.Remarks;
             await _todoRepository.UpdateAsync(toDos);
         }
     }

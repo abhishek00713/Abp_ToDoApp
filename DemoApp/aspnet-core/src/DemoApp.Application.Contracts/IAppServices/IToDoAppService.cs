@@ -15,5 +15,6 @@ namespace DemoApp.IAppServices
         Task<ToDoDto> CreateASync(CreateToDoDto input);
         Task UpdateAsync(Guid id, UpdateToDoDto input);
         Task DeleteAsync(Guid id);
+        Task<PagedResultDto<ToDoDto>> GetAllListAsync(GetAllToDoListDto input);
     }
 }
