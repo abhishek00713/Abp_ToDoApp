@@ -32,24 +32,52 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<AssignedToUser, AssignedToUserDto>(assigneduser);
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _assignedtouserRepository.DeleteAsync(id);
         }
 
-        public Task<AssignedToUserDto> GetAsync(Guid id)
+        public async Task<AssignedToUserDto> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            AssignedToUser assignedUser = await _assignedtouserRepository.GetAsync(id);
+            return ObjectMapper.Map<AssignedToUser, AssignedToUserDto>(assignedUser);
         }
 
-        public Task<PagedResultDto<AssignedToUserDto>> GetListAsync(GetAssignedToUserListDto input)
+        public async Task<PagedResultDto<AssignedToUserDto>> GetListAsync(GetAssignedToUserListDto input)
         {
-            throw new NotImplementedException();
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(AssignedToUserDto.IsActive);
+            }
+
+            List<AssignedToUser> assignedUsers = await _assignedtouserRepository.GetPagedListAsync(
+
+                input.SkipCount,
+                input.MaxResultCount,
+                input.Sorting
+                );
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                _assignedtouserRepository
+                );
+
+            List<AssignedToUserDto> assignedToUsers =
+                ObjectMapper.Map<List<AssignedToUser>, List<AssignedToUserDto>>(assignedUsers);
+
+            PagedResultDto<AssignedToUserDto> result = new PagedResultDto<AssignedToUserDto>(
+                    totalcount, assignedToUsers
+                );
+
+
+
+            return result;
         }
 
-        public Task UpdateAsync(Guid id, UpdateAssignedToUserDto input)
+        public async Task UpdateAsync(Guid id, UpdateAssignedToUserDto input)
         {
-            throw new NotImplementedException();
+            var assignedToUsers = await _assignedtouserRepository.GetAsync(id);
+            assignedToUsers.IsActive = input.IsActive;
+            await _assignedtouserRepository.UpdateAsync(assignedToUsers);
         }
     }
 }

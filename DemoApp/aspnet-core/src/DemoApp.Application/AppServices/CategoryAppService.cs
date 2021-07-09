@@ -100,11 +100,7 @@ namespace DemoApp.AppServices
         {
             var category = await _categoryRepository.GetAsync(id);
 
-            category.CategoryName = input.CategoryName;
-            
-
-
-
+            category.CategoryName = input.CategoryName;                        
             await _categoryRepository.UpdateAsync(category);
         }
     }

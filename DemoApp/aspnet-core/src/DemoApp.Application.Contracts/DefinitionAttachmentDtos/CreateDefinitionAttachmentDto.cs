@@ -7,11 +7,11 @@ namespace DemoApp.DefinitionAttachmentDtos
 {
     public class CreateDefinitionAttachmentDto
     {
+        [Required]
         public Guid ToDoId { get; set; }
         [Required]
-        public string AttachmentName { get; set; }
-        [Required]
-        public string AttachmentFileURL { get; set; }
+        public string Caption { get; set; }
+        public Guid FileName { get; set; }
         [Required]
         public byte[] BinaryFile { get; set; }
     }
