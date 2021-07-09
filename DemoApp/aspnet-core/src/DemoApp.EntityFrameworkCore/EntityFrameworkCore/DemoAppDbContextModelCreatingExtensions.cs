@@ -112,6 +112,7 @@ namespace DemoApp.EntityFrameworkCore
                 //b.HasOne<Volo.Abp.Identity.IdentityUser>().WithMany().HasForeignKey(i => i.AssignedBy).IsRequired();
                 //b.HasOne<Task1>().WithOne().IsRequired();
 
+            });
 
             builder.Entity<ToDoUserTask>(b =>
             {
