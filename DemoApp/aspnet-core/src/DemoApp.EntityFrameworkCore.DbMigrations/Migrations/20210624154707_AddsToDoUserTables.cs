@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DemoApp.Migrations
 {
-    public partial class added_ToDoUserTask : Migration
+    public partial class AddsToDoUserTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,6 +70,7 @@ namespace DemoApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+
             migrationBuilder.CreateIndex(
                 name: "IX_ToDoUserAttachments_ToDOUserTaskId",
                 table: "ToDoUserAttachments",
@@ -89,10 +90,175 @@ namespace DemoApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AbpAuditLogActions");
+
+            migrationBuilder.DropTable(
+                name: "AbpBackgroundJobs");
+
+            migrationBuilder.DropTable(
+                name: "AbpClaimTypes");
+
+            migrationBuilder.DropTable(
+                name: "AbpEntityPropertyChanges");
+
+            migrationBuilder.DropTable(
+                name: "AbpFeatureValues");
+
+            migrationBuilder.DropTable(
+                name: "AbpLinkUsers");
+
+            migrationBuilder.DropTable(
+                name: "AbpOrganizationUnitRoles");
+
+            migrationBuilder.DropTable(
+                name: "AbpPermissionGrants");
+
+            migrationBuilder.DropTable(
+                name: "AbpRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AbpSecurityLogs");
+
+            migrationBuilder.DropTable(
+                name: "AbpSettings");
+
+            migrationBuilder.DropTable(
+                name: "AbpTenantConnectionStrings");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserOrganizationUnits");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AssignedToUsers");
+
+            migrationBuilder.DropTable(
+                name: "DefinitionAttachments");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResourceClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResourceProperties");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResourceScopes");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResourceSecrets");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiScopeClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiScopeProperties");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientCorsOrigins");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientGrantTypes");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientIdPRestrictions");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientPostLogoutRedirectUris");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientProperties");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientRedirectUris");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientScopes");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClientSecrets");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerDeviceFlowCodes");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerIdentityResourceClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerIdentityResourceProperties");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerPersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "ToDoUserAttachments");
 
             migrationBuilder.DropTable(
+                name: "AbpEntityChanges");
+
+            migrationBuilder.DropTable(
+                name: "AbpTenants");
+
+            migrationBuilder.DropTable(
+                name: "AbpOrganizationUnits");
+
+            migrationBuilder.DropTable(
+                name: "AbpRoles");
+
+            migrationBuilder.DropTable(
+                name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppUser");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResources");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiScopes");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerClients");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerIdentityResources");
+
+            migrationBuilder.DropTable(
                 name: "ToDoUserTasks");
+
+            migrationBuilder.DropTable(
+                name: "AbpAuditLogs");
+
+            migrationBuilder.DropTable(
+                name: "ToDos");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Priorities");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Task1s");
         }
     }
 }
