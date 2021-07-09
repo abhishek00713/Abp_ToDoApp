@@ -13,11 +13,7 @@ namespace DemoApp.IAppServices
         Task<DefinitionAttachmentDto> GetAsync(Guid id);
         Task<PagedResultDto<DefinitionAttachmentDto>> GetListAsync(GetDefinitionAttachmentListDto input);
         Task<DefinitionAttachmentDto> CreateASync(CreateDefinitionAttachmentDto input);
-        Task UpdateAsync(Guid id, UpdateDefinitionAttachmentDto input);
-        Task DeleteAsync(Guid id);
-
-        //Blob File Upload
-        Task SaveBlobAsync(byte[] bytes, string fname);
-        Task<byte[]> GetBlobAsync(string fname);
+        Task<DefinitionAttachmentDto> UpdateAsync(Guid id, UpdateDefinitionAttachmentDto input);
+        Task<bool> DeleteAsync(Guid id);
     }
 }

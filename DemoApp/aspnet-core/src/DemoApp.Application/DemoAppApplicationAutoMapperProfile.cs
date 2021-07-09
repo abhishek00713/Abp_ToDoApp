@@ -48,6 +48,7 @@ namespace DemoApp
             CreateMap<ToDo, ToDoDto>();
             CreateMap<CreateToDoDto, ToDo>();
             CreateMap<ToDo, GetToDoListDto>();
+            CreateMap<ToDo, GetAllToDoListDto>();
             CreateMap<UpdateToDoDto, ToDo>();
 
             CreateMap<DefinitionAttachment, DefinitionAttachmentDto>();
@@ -59,6 +60,7 @@ namespace DemoApp
             CreateMap<CreateAssignedToUserDto, AssignedToUser>();
             CreateMap<AssignedToUser, GetAssignedToUserListDto>();
             CreateMap<UpdateAssignedToUserDto, AssignedToUser>();
+
 
 
             CreateMap<ToDoUserAttachment, ToDoUserAttachmentDto>();
