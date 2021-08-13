@@ -31,6 +31,14 @@ export class PriorityService {
     },
     { apiName: this.apiName });
 
+  getFullListByInput = (input: GetPriorityListDto) =>
+    this.restService.request<any, PagedResultDto<PriorityDto>>({
+      method: 'GET',
+      url: '/api/app/priority/full-list',
+      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+
   getList = (input: GetPriorityListDto) =>
     this.restService.request<any, PagedResultDto<PriorityDto>>({
       method: 'GET',

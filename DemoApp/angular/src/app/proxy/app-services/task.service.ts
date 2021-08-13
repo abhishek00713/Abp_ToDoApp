@@ -31,6 +31,14 @@ export class TaskService {
     },
     { apiName: this.apiName });
 
+  getFullListByInput = (input: GetTaskListDto) =>
+    this.restService.request<any, PagedResultDto<TaskDto>>({
+      method: 'GET',
+      url: '/api/app/task/full-list',
+      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+
   getList = (input: GetTaskListDto) =>
     this.restService.request<any, PagedResultDto<TaskDto>>({
       method: 'GET',

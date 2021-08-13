@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DemoApp.Migrations
 {
-    public partial class added_changes_branch : Migration
+    public partial class addedafterchayanbranchpull : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1151,7 +1151,6 @@ namespace DemoApp.Migrations
                     PriorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1224,6 +1223,7 @@ namespace DemoApp.Migrations
                     ToDoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    ToDoId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1249,6 +1249,12 @@ namespace DemoApp.Migrations
                         principalTable: "ToDos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AssignedToUsers_ToDos_ToDoId1",
+                        column: x => x.ToDoId1,
+                        principalTable: "ToDos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1257,8 +1263,8 @@ namespace DemoApp.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ToDoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AttachmentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AttachmentFileURL = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Caption = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FileName = table.Column<Guid>(type: "uniqueidentifier", maxLength: 100, nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1274,34 +1280,6 @@ namespace DemoApp.Migrations
                     table.PrimaryKey("PK_DefinitionAttachments", x => x.Id);
                     table.ForeignKey(
                         name: "FK_DefinitionAttachments_ToDos_ToDoId",
-                        column: x => x.ToDoId,
-                        principalTable: "ToDos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ToDoAssignedTos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ToDoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignedTo = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ToDoAssignedTos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ToDoAssignedTos_ToDos_ToDoId",
                         column: x => x.ToDoId,
                         principalTable: "ToDos",
                         principalColumn: "Id",
@@ -1529,6 +1507,11 @@ namespace DemoApp.Migrations
                 column: "ToDoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssignedToUsers_ToDoId1",
+                table: "AssignedToUsers",
+                column: "ToDoId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AssignedToUsers_UserId",
                 table: "AssignedToUsers",
                 column: "UserId");
@@ -1573,11 +1556,6 @@ namespace DemoApp.Migrations
                 name: "IX_IdentityServerPersistedGrants_SubjectId_SessionId_Type",
                 table: "IdentityServerPersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ToDoAssignedTos_ToDoId",
-                table: "ToDoAssignedTos",
-                column: "ToDoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ToDos_CategoryId",
@@ -1733,9 +1711,6 @@ namespace DemoApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "ToDoAssignedTos");
 
             migrationBuilder.DropTable(
                 name: "ToDoUserAttachments");

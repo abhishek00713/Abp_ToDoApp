@@ -11,6 +11,9 @@ using DemoApp.ToDo_AssignedDtos;
 using DemoApp.ToDoDtos;
 using DemoApp.ToDoUserAttachmentDtos;
 using DemoApp.ToDoUserTaskDtos;
+using DemoApp.UserDtos;
+using DemoApp.Users;
+using Volo.Abp.Identity;
 
 namespace DemoApp
 {
@@ -18,6 +21,7 @@ namespace DemoApp
     {
         public DemoAppApplicationAutoMapperProfile()
         {
+            CreateMap<IdentityUser, IdentityUserDto>();
 
             CreateMap<Product, ProductDto>();
             CreateMap<CreateProductDto, Product>();
@@ -77,6 +81,8 @@ namespace DemoApp
             CreateMap<CreateToDoUserTaskDto, ToDoUserTask>();
             CreateMap<ToDoUserTask, GetToDoUserTaskListDto>();
             CreateMap<UpdateToDoUserTaskDto, ToDoUserTask>();
+
+            CreateMap<AppUser, AbpUserDto>();
 
         }
     }

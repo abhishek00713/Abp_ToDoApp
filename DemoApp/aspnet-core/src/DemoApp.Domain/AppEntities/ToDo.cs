@@ -23,7 +23,7 @@ namespace DemoApp.AppEntities
         public virtual Category Category { get; set; }
         public virtual Priority Priority { get; set; }
         public virtual Status Status { get; set; }
-        public virtual Task1 Tasks { get; set; }
+        public virtual ToDoTask Tasks { get; set; }
         public virtual ICollection<DefinitionAttachment> DefinitionAttachments { get; set; }
         public virtual ICollection<AssignedToUser> AssignedToUsers { get; set; }
     }

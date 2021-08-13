@@ -1,10 +1,11 @@
 import { ListService, LIST_QUERY_DEBOUNCE_TIME, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { CategoryDto } from '../proxy/category-dtos';
+import { CategoryDto, GetCategoryListDto } from '../proxy/category-dtos';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { CategoryService } from '../proxy/app-services';
+import { GetTaskListDto } from '../proxy/task-dtos';
 
 @Component({
   providers: [
@@ -19,13 +20,15 @@ import { CategoryService } from '../proxy/app-services';
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
-  searchedKeyword: string;
+  searchedKeyword: string = null;
 
   category = { items: [], totalCount: 0 } as PagedResultDto<CategoryDto>;
   closeResult = '';
   form: FormGroup;
   selectedCategory = {} as CategoryDto;
   isModalOpen = false;
+
+
 
 
   constructor(
@@ -39,15 +42,58 @@ export class CategoryComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    const statusStreamCreator = (query) => this.categoryService.getList(query);
+  clear() {
+    this.searchedKeyword = '';
+    this.list.get();
+  }
 
+  search() {
+    console.log("searched", this.searchedKeyword);
+    this.form = this.fb.group({
+      filter: [this.searchedKeyword, Validators.required],
 
-    this.list.hookToQuery(statusStreamCreator).subscribe((response) => {
-
-      this.category = response;
     });
+ 
+    this.categoryService.getList(this.form.value).subscribe((response) => {
+     
+      this.form.reset();
+      this.category = response;
+      
+    });
+  }
 
+
+
+  setPage(pageInfo) {
+
+      const statusStreamCreator = (query) => this.categoryService.getList(query);
+
+
+
+      this.list.hookToQuery(statusStreamCreator).subscribe((response) => {
+
+        this.category = response;
+
+
+
+
+      });
+   
+    
+ 
+
+    
+
+
+   
+  }
+
+  ngOnInit() {
+   
+   
+      this.setPage({ offset: 0, limit: 10 });
+  
+    
 
 
   }

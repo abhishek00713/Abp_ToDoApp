@@ -12,6 +12,8 @@ namespace DemoApp.IAppServices
     {
         Task<StatusDto> GetAsync(Guid id);
         Task<PagedResultDto<StatusDto>> GetListAsync(GetStatusListDto input);
+
+        Task<PagedResultDto<StatusDto>> GetFullList(GetStatusListDto input);
         Task<StatusDto> CreateASync(CreateStatusDto input);
         Task UpdateAsync(Guid id, UpdateStatusDto input);
         Task DeleteAsync(Guid id);

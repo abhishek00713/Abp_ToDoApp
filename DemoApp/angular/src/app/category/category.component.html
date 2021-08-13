@@ -30,26 +30,44 @@
         <!--<input type="search" class="form-control ng-pristine ng-valid ng-touched" placeholder="Search" ng-reflect-model="">-->
 
         <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
+        <button style="margin-right:8px" type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="clear()">
+          <i class="mr-1" ng-reflect-ng-class=""></i>
+          Clear
+        </button>
+        <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="search()">
+          <i class="mr-1" ng-reflect-ng-class=""></i>
+          Search
+        </button>
       </div>
     </div>
-    <ngx-datatable [rows]="category.items | filter:searchedKeyword" [count]="category.totalCount" [list]="list" default>
-
-      <ngx-datatable-column prop="Category Name">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.categoryName  }}
-          <div style="float:right; cursor:pointer">
-            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="editCategory(row.id)">
-              <i class="mr-1" ng-reflect-ng-class=""></i>
-              Edit
-            </button>
-            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" style="margin-left:20px" (click)="delete(row.id)">
-              <i class="mr-1" ng-reflect-ng-class=""></i>
-              Delete
-            </button>
-          </div>
-        </ng-template>
-        >
-      </ngx-datatable-column>
+    <ngx-datatable [rows]="category.items "
+                   [count]="category.totalCount" [list]="list"
+                   
+        
+        [headerHeight]="50"
+        [footerHeight]="50"
+        rowHeight="auto"
+        [limit]="10"
+                   [columnMode]="'force'"
+                   (page)="setPage($event)"
+                   default>
+    
+        <ngx-datatable-column prop="Category Name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.categoryName  }}
+            <div style="float:right; cursor:pointer">
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="editCategory(row.id)">
+                <i class="mr-1" ng-reflect-ng-class=""></i>
+                Edit
+              </button>
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" style="margin-left:20px" (click)="delete(row.id)">
+                <i class="mr-1" ng-reflect-ng-class=""></i>
+                Delete
+              </button>
+            </div>
+          </ng-template>
+          >
+        </ngx-datatable-column>
 
     </ngx-datatable>
   </div>

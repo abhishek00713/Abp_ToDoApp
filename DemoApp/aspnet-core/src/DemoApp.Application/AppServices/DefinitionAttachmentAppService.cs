@@ -11,20 +11,36 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Domain.Repositories;
 
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
+    //[Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class DefinitionAttachmentAppService : DemoAppAppService, IDefinitionAttachmentAppService, IBlobFileUpload
     {
         private readonly IRepository<DefinitionAttachment, Guid> _definitionattachmentRepository;
-        private readonly IBlobContainer<ToDoDefinitionFileContainer> _fileContainer;
+        private  readonly IBlobContainer<ToDoDefinitionFileContainer> _fileContainer;
+        private  readonly IBlobContainer<ToDoUserFileContainer> _User_fileContainer;
+        private  IBlobContainerFactory _blobContainer;
+        
+        private IBlobContainer _file;
 
-        public DefinitionAttachmentAppService(IRepository<DefinitionAttachment, Guid> definitionattachmentRepository, IBlobContainer<ToDoDefinitionFileContainer> fileContainer)
+
+
+
+
+        public DefinitionAttachmentAppService(IBlobContainerFactory blobContainerFactory,
+            IRepository<DefinitionAttachment, Guid> definitionattachmentRepository,
+            IBlobContainer<ToDoDefinitionFileContainer> fileContainer,
+            IBlobContainer<ToDoUserFileContainer> userfilecontainer
+            )
         {
             _definitionattachmentRepository = definitionattachmentRepository;
             _fileContainer = fileContainer;
+            _blobContainer = blobContainerFactory;
+            _User_fileContainer = userfilecontainer;
+             
         }
 
 
@@ -41,7 +57,9 @@ namespace DemoApp.AppServices
             DefinitionAttachment attachments =
                 ObjectMapper.Map<CreateDefinitionAttachmentDto, DefinitionAttachment>(input);
             //Upload file first
-            await SaveBlobFileAsync(input.BinaryFile, input.FileName);
+            byte[] bytes = Encoding.ASCII.GetBytes(input.BinaryFile);
+
+            await SaveBlobFileAsync(_fileContainer,bytes, input.FileName);
 
             //Push to DB
             var createdAttachment = await _definitionattachmentRepository.InsertAsync(attachments);
@@ -121,7 +139,7 @@ namespace DemoApp.AppServices
                 if (await DeleteBlobFileAsync(attachmentDetail.FileName))
                 {
                     //if deleted, upload new file   
-                    await SaveBlobFileAsync(input.BinaryFile, attachmentDetail.FileName);
+                    await SaveBlobFileAsync(_fileContainer, input.BinaryFile, attachmentDetail.FileName);
                 }
             }
 
@@ -134,21 +152,60 @@ namespace DemoApp.AppServices
 
         #region File Attachment Methods
         //Upload Definition File        
-        public async Task SaveBlobFileAsync(byte[] bytes, Guid fname)
-        {
-            await _fileContainer.SaveAsync(fname.ToString(), bytes);
-        }
+        //public async Task SaveBlobFileAsync(byte[] bytes, Guid fname)
+        //{
+        //    await _fileContainer.SaveAsync(fname.ToString(), bytes);
+        //}
 
         public async Task<byte[]> GetBlobFileAsync(Guid fname)
         {
-            return await _fileContainer.GetAllBytesOrNullAsync(fname.ToString());
+            
+
+           
+            var x=    await _fileContainer.GetAllBytesOrNullAsync(fname.ToString());
+
+            var y = Encoding.ASCII.GetString(x);
+
+            await this.SaveBlobFileAsync(_User_fileContainer, x, fname);
+
+          
+        
+            return x;
         }
 
         public async Task<bool> DeleteBlobFileAsync(Guid fname)
         {
-            return await _fileContainer.DeleteAsync(fname.ToString());
+            var attachment_list = _definitionattachmentRepository.Where(x => x.FileName == fname).Select(x => x.Id).FirstOrDefault();
+
+            
+
+            var user_role = CurrentUser.Roles[0].ToString();
+
+            if (CurrentUser.Roles[0].ToString().Contains("admin"))
+            {
+                await _definitionattachmentRepository.DeleteAsync(attachment_list);
+                return await _fileContainer.DeleteAsync(fname.ToString());
+            }
+            else
+            {
+                return await _User_fileContainer.DeleteAsync(fname.ToString());
+            }
+
+            
+        }
+
+        public async Task SaveBlobFileAsync(IBlobContainer container, byte[] bytes, Guid fname)
+        {
+          var exists =  container.ExistsAsync(fname.ToString());
+            if (await exists)
+            {
+                await container.DeleteAsync(fname.ToString());
+            }
+            await container.SaveAsync(fname.ToString(), bytes);
         }
         #endregion
+
+
 
     }
 }

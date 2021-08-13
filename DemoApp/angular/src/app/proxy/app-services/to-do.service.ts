@@ -2,6 +2,7 @@ import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 import type { CreateToDoDto, GetAllToDoListDto, GetToDoListDto, ToDoDto, UpdateToDoDto } from '../to-do-dtos/models';
+import type { IdentityUserDto } from '../volo/abp/identity/models';
 
 @Injectable({
   providedIn: 'root',
@@ -39,10 +40,26 @@ export class ToDoService {
     },
     { apiName: this.apiName });
 
+  getCurrentUserRole = () =>
+    this.restService.request<any, string>({
+      method: 'GET',
+      responseType: 'text',
+      url: '/api/app/to-do/current-user-role',
+    },
+    { apiName: this.apiName });
+
   getList = (input: GetToDoListDto) =>
     this.restService.request<any, PagedResultDto<ToDoDto>>({
       method: 'GET',
       url: '/api/app/to-do',
+      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+
+  getUserListByInput = (input: GetToDoListDto) =>
+    this.restService.request<any, IdentityUserDto[]>({
+      method: 'GET',
+      url: '/api/app/to-do/user-list',
       params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });

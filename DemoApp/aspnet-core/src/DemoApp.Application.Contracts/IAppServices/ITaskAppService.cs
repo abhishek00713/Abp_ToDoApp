@@ -12,6 +12,7 @@ namespace DemoApp.IAppServices
     {
         Task<TaskDto> GetAsync(Guid id);
         Task<PagedResultDto<TaskDto>> GetListAsync(GetTaskListDto input);
+        Task<PagedResultDto<TaskDto>> GetFullList(GetTaskListDto input);
         Task<TaskDto> CreateASync(CreateTaskDto input);
         Task UpdateAsync(Guid id, UpdateTaskDto input);
         Task DeleteAsync(Guid id);

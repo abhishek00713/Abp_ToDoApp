@@ -45,8 +45,8 @@ namespace DemoApp.AppServices
 
             return ObjectMapper.Map<Priority, PriorityDto>(priority);
         }
-        [Authorize]
-        public async Task<PagedResultDto<PriorityDto>> GetListAsync(GetPriorityListDto input)
+
+        public async Task<PagedResultDto<PriorityDto>> GetFullList(GetPriorityListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
@@ -71,6 +71,48 @@ namespace DemoApp.AppServices
 
             List<PriorityDto> priorityDtos =
                 ObjectMapper.Map<List<Priority>, List<PriorityDto>>(priorities);
+
+            PagedResultDto<PriorityDto> result = new PagedResultDto<PriorityDto>(
+                    totalcount, priorityDtos
+                );
+
+
+
+            return result;
+        }
+
+        [Authorize]
+        public async Task<PagedResultDto<PriorityDto>> GetListAsync(GetPriorityListDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Priority.PriorityName);
+            }
+
+
+            var priorityList = _priorityRepository
+
+            .WhereIf(
+                !input.Filter.IsNullOrEmpty(),
+                p => p.PriorityName.Contains(input.Filter)
+          ).OrderBy(p => p.PriorityName)
+          .Skip(input.SkipCount)
+            .Take(input.MaxResultCount)
+
+            .ToList(); ;
+
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                _priorityRepository.WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    priority => priority.PriorityName.Contains(input.Filter)
+                    )
+                );
+
+
+
+            List<PriorityDto> priorityDtos =
+                ObjectMapper.Map<List<Priority>, List<PriorityDto>>(priorityList);
 
             PagedResultDto<PriorityDto> result = new PagedResultDto<PriorityDto>(
                     totalcount, priorityDtos

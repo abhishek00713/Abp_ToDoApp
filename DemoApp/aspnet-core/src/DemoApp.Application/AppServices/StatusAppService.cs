@@ -42,25 +42,37 @@ namespace DemoApp.AppServices
                 input.Sorting = nameof(Status.StatusName);
             }
 
-            List<Status> statuses = await _statusRepository.GetPagedListAsync(
 
-                input.SkipCount,
-                input.MaxResultCount,
-                input.Sorting
-                );
+            var statusList = _statusRepository
+
+            .WhereIf(
+                !input.Filter.IsNullOrEmpty(),
+                p => p.StatusName.Contains(input.Filter)
+          ).OrderBy(p => p.StatusName)
+          .Skip(input.SkipCount)
+            .Take(input.MaxResultCount)
+
+            .ToList(); ;
+
+            //List<ToDoTask> tasks = await _taskRepository.GetPagedListAsync(
+
+
+            //    input.SkipCount,
+            //    input.MaxResultCount,
+            //    input.Sorting
+            //    );
 
             var totalcount = await AsyncExecuter.CountAsync(
                 _statusRepository.WhereIf(
                     !input.Filter.IsNullOrWhiteSpace(),
-                    Status => Status.StatusName.Contains(input.Filter)
-                            
+                    status => status.StatusName.Contains(input.Filter)
                     )
                 );
 
 
 
             List<StatusDto> statusDtos =
-                ObjectMapper.Map<List<Status>, List<StatusDto>>(statuses);
+                ObjectMapper.Map<List<Status>, List<StatusDto>>(statusList);
 
             PagedResultDto<StatusDto> result = new PagedResultDto<StatusDto>(
                     totalcount, statusDtos
@@ -104,6 +116,42 @@ namespace DemoApp.AppServices
         public async Task DeleteAsync(Guid id)
         {
             await _statusRepository.DeleteAsync(id);
+        }
+
+        public async Task<PagedResultDto<StatusDto>> GetFullList(GetStatusListDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Status.StatusName);
+            }
+
+            List<Status> statuses = await _statusRepository.GetPagedListAsync(
+
+                input.SkipCount,
+                input.MaxResultCount,
+                input.Sorting
+                );
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                _statusRepository.WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    Status => Status.StatusName.Contains(input.Filter)
+
+                    )
+                );
+
+
+
+            List<StatusDto> statusDtos =
+                ObjectMapper.Map<List<Status>, List<StatusDto>>(statuses);
+
+            PagedResultDto<StatusDto> result = new PagedResultDto<StatusDto>(
+                    totalcount, statusDtos
+                );
+
+
+
+            return result;
         }
     }
 }

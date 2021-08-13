@@ -4,7 +4,7 @@ export interface CreateDefinitionAttachmentDto {
   toDoId: string;
   caption: string;
   fileName?: string;
-  binaryFile: number[];
+  binaryFile: string;
 }
 
 export interface DefinitionAttachmentDto extends EntityDto<string> {

@@ -1,22 +1,27 @@
+<!--No login-->
+<div  *ngIf="is_not_logged_in">
+  <h1>You need to login to view the page. </h1>
+</div>
 
-<div class="card">
+<!--User Pages-->
+<div *ngIf="is_userlogged_in">
   <div class="card-header">
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">
-          {{ '::Menu:todo' | abpLocalization }}
+          User Assigned ToDo
         </h5>
 
       </div>
       <div class="text-right col col-md-6">
         <div id="AbpContentToolbar" style="float : right">
           <div class="col-auto px-1 pt-2 ng-star-inserted">
-
-
-            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="createToDo()">
-              <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
-              New To-Do
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="SearchModal()">
+              <i class="mr-1 fa fa-search" ng-reflect-ng-class="fa fa-search"></i>
+              Search
             </button>
+
+           
 
           </div>
 
@@ -25,17 +30,20 @@
     </div>
   </div>
   <div class="card-body">
-    <div id="data-tables-table-filter" class="data-tables-filter">
-      <div class="input-group">
-        <!--<input type="search" class="form-control ng-pristine ng-valid ng-touched" placeholder="Search" ng-reflect-model="">-->
+    <ngx-datatable [rows]="assigned_user_todo.items "
+                   [count]="assigned_user_todo.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   (page)="User_setPage($event)"
+                   default>
 
-        <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
-      </div>
-    </div>
-    <ngx-datatable [rows]="todo.items | filter:searchedKeyword" [count]="todo.totalCount" [list]="list" default>
       <ngx-datatable-column prop="Category ">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.category  }}
+
+          {{ row.category?.categoryName}}
 
         </ng-template>
 
@@ -43,7 +51,7 @@
 
       <ngx-datatable-column prop="Status ">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.status  }}
+          {{ row.status?.statusName  }}
 
         </ng-template>
 
@@ -51,7 +59,7 @@
 
       <ngx-datatable-column prop="Priority ">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.priority  }}
+          {{ row.priority?.priorityName  }}
 
         </ng-template>
 
@@ -59,7 +67,7 @@
 
       <ngx-datatable-column prop="Task ">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.task  }}
+          {{ row.task?.taskName  }}
 
         </ng-template>
 
@@ -76,35 +84,184 @@
       <ngx-datatable-column prop="Remarks">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {{ row.remarks  }}
-         
+
         </ng-template>
 
       </ngx-datatable-column>
 
 
-      <ngx-datatable-column prop="Action ">
+
+
+
+      <ngx-datatable-column prop="Action">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          <div ngbDropdown container="body" class="d-inline-block">
-            <button class="btn btn-primary btn-sm dropdown-toggle"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    ngbDropdownToggle>
-              <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
-            </button>
-            <div ngbDropdownMenu>
+          <div style="width: 191.571px">
+           
+            <div ngbDropdown container="body" class="d-inline-block">
 
-              <button ngbDropdownItem (click)="editToDo(row.id)">
-               Add Files
-              </button>
 
-              <button ngbDropdownItem (click)="editToDo(row.id)">
-                {{ '::Edit' | abpLocalization }}
+
+              <button class="btn btn-primary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      ngbDropdownToggle>
+                <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
               </button>
-              <button ngbDropdownItem (click)="delete(row.id)">
-                {{ '::Delete' | abpLocalization }}
-              </button>
+              <div ngbDropdownMenu>
+
+
+
+                <button ngbDropdownItem (click)="FileUploadModal(row.id)">
+                  Files
+                </button>
+
+               
+              </div>
             </div>
+
           </div>
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+  </div>
+</div>
+
+<!--Admin Page-->
+<div class="card" *ngIf="is_adminlogged_in">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          {{ '::Menu:todo' | abpLocalization }}
+        </h5>
+
+      </div>
+      <div class="text-right col col-md-6">
+        <div id="AbpContentToolbar" style="float : right">
+          <div class="col-auto px-1 pt-2 ng-star-inserted">
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="SearchModal()">
+              <i class="mr-1 fa fa-search" ng-reflect-ng-class="fa fa-search"></i>
+              Search
+            </button>
+
+            <button type="button" style="margin-left:10px" class="btn btn-primary btn-sm ng-star-inserted" (click)="createToDo()">
+              <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
+              New To-Do
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ngx-datatable [rows]="todo.items "
+                   [count]="todo.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   (page)="setPage($event)"
+                   default>
+
+      <ngx-datatable-column prop="Category ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+
+          {{ row.category?.categoryName}}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Status ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.status?.statusName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Priority ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.priority?.priorityName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Task ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.task?.taskName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Date ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.date  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Remarks">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.remarks  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+
+
+
+      <ngx-datatable-column prop="Action">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div style="width: 191.571px">
+            <div style="float:left; margin-right:4px">
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="UserList(row.id)">
+                <i class="mr-1 fa fa-user" ng-reflect-ng-class="fa fa-user"></i>
+
+              </button>
+
+            </div>
+            <div ngbDropdown container="body" class="d-inline-block">
+
+
+
+              <button class="btn btn-primary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      ngbDropdownToggle>
+                <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+              </button>
+              <div ngbDropdownMenu>
+
+
+
+                <button ngbDropdownItem (click)="FileUploadModal(row.id)">
+                  Add Files
+                </button>
+
+                <button ngbDropdownItem (click)="editToDo(row.id)">
+                  {{ '::Edit' | abpLocalization }}
+                </button>
+                <button ngbDropdownItem (click)="delete(row.id)">
+                  {{ '::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
+
+          </div>
+
         </ng-template>
 
       </ngx-datatable-column>
@@ -118,6 +275,8 @@
 
 
 
+
+<!--New Nad Edit TODO-->
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
     <h3>{{ (selectedToDo.id ? '::Edit' : '::NewToDo') | abpLocalization }}</h3>
@@ -191,7 +350,7 @@
          ngbDatepicker
          (click)="datepicker.toggle()" />-->
 
-        <ejs-datetimepicker id='datetimepicker'formControlName="date" placeholder='Select date and time '  format='yyyy.MM.dd HH:mm'></ejs-datetimepicker>
+        <ejs-datetimepicker id='datetimepicker' formControlName="date" placeholder='Select date and time ' format='yyyy.MM.dd HH:mm'></ejs-datetimepicker>
 
 
 
@@ -218,5 +377,293 @@
   </ng-template>
 </abp-modal>
 
+<!--Search-->
+<abp-modal [(visible)]="isSearchOpen">
+  <ng-template #abpHeader>
+    <h3>Search</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="search()">
+      <!--Category-->
+      <div class="form-group" style="margin-bottom:0px !important">
+        <label for="category">Category</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
 
 
+      <select class="custom-select" formControlName="filterCategory">
+        <option [ngValue]="null" disabled>Select Category</option>
+
+        <option *ngFor="let category of categorylist | keyvalue" [ngValue]="category.value.Name">{{category.value.Name}}</option>
+      </select>
+
+      <!--Status-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="status">Status</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterStatus">
+        <option [ngValue]="null" disabled>Select Status</option>
+
+        <option *ngFor="let status of statuslist | keyvalue" [ngValue]="status.value.Name">{{status.value.Name}}</option>
+      </select>
+
+      <!--Priority-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="priority">Priority</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterPriority">
+        <option [ngValue]="null" disabled>Select Priority</option>
+
+        <option *ngFor="let priority of prioritylist | keyvalue" [ngValue]="priority.value.Name">{{priority.value.Name}}</option>
+      </select>
+
+      <!--Task-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="task">Task</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterTask">
+        <option [ngValue]="null" disabled>Select Task</option>
+
+        <option *ngFor="let task of tasklist | keyvalue" [ngValue]="task.value.Name">{{task.value.Name}}</option>
+      </select>
+
+
+
+
+
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="search()">
+      <i class="fa fa-check mr-1"></i>
+      Search
+    </button>
+  </ng-template>
+</abp-modal>
+
+<!--Add User-->
+<abp-modal [(visible)]="isUserModalOpen">
+  <ng-template #abpHeader>
+    <h3>Add User</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+
+
+    <div class="form-group">
+      <label for="User">User</label><span> * </span>
+
+    </div>
+
+    <div style="margin-bottom:20px !important">
+      <form [formGroup]="form">
+        <ng-multiselect-dropdown name="preselect"
+                                 [placeholder]="'Select uSER'"
+                                 [settings]="dropdownSettings"
+                                 [data]="dropdownList"
+                                 formControlName="preselect"
+                                 [disabled]="false"
+                                 (onFilterChange)="onFilterChange($event)"
+                                 (onDropDownClose)="onDropDownClose($event)"
+                                 (onSelect)="onItemSelect($event)"
+                                 (onDeSelect)="onDeSelect($event)"
+                                 (onSelectAll)="onSelectAll($event)"
+                                 (onDeSelectAll)="onDeSelectAll($event)">
+        </ng-multiselect-dropdown>
+      </form>
+
+    </div>
+
+
+
+
+
+
+
+
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" (click)="closeDropdown()">
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="saveUser()">
+      <i class="fa fa-check mr-1"></i>
+      Save
+    </button>
+  </ng-template>
+
+
+</abp-modal>
+
+
+<!--File Upload-->
+
+<abp-modal [(visible)]="isFileUpload">
+  <ng-template #abpHeader>
+    <div style="text-align:center; margin-top: 20px;">
+      <h4>
+        File
+      </h4>
+    </div>
+
+  </ng-template>
+
+  <ng-template #abpBody>
+
+    <div *ngIf="is_adminlogged_in">
+      <i class="fa fa-plus fa-2x" style="cursor: pointer; color: darkslateblue;" (click)="addFile()"></i>  Add new files
+      <input style="display: none;" type="file" id="fileUpload" #selectedFile [(ngModel)]="fileUpload" (click)="selectedFile.value = null" value="" (change)="handleFileInput($event.target.files)" />
+      <pre id="file"></pre>
+    </div>
+   
+    <table style="margin-top: 20px;">
+      <tr>
+        <th class="column1">Uploaded Files</th>
+        <th class="column2" style="text-align:center;">Download</th>
+        <th class="column3" style="text-align:center;">Delete</th>
+      </tr>
+      <tr *ngFor="let file of files">
+        <td class="column1">{{file.caption}}</td>
+        <td class="column2" style="text-align:center;cursor: pointer;" (click)="downloadFile(file.fileName,file.caption)"><i class="fa fa-download"></i></td>
+        <td class="column3" style="text-align:center;cursor: pointer;" (click)="deleteFile(file.fileName)"><i class="mr-1 fa fa-trash" ng-reflect-ng-class="fa fa-user"></i></td>
+
+      </tr>
+    </table>
+
+
+
+  </ng-template>
+
+  <ng-template #abpFooter>
+
+
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+  </ng-template>
+
+</abp-modal>
+
+
+<!--UserList-->
+<abp-modal [(visible)]="isUserListOpen">
+  <ng-template #abpHeader>
+    <h3>User List</h3>
+
+  </ng-template>
+
+  <ng-template #abpBody>
+
+    <div>
+      <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="AddUser()">
+        <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
+        Add User
+      </button>
+
+    </div>
+    <ngx-datatable [rows]="selected_todo_user_list.items "
+                   [count]="selected_todo_user_list.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   default>
+
+
+
+      <ngx-datatable-column prop="Full Name ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.name  }}
+          {{ row.surname  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+
+      <ngx-datatable-column prop="Email ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.email  }}
+
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="User Name">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.userName  }}
+
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+      <ngx-datatable-column prop="Action">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div style="width: 191.571px">
+            <div style="float:left; margin-right:4px">
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="DeleteUser(row.id)">
+                <i class="mr-1 fa fa-trash" ng-reflect-ng-class="fa fa-user"></i>
+
+              </button>
+
+            </div>
+
+
+          </div>
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+  </ng-template>
+
+  <ng-template #abpFooter>
+
+
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+
+
+
+<!--Download Finish-->
+<abp-modal [(visible)]="isDownloadFinish">
+
+
+  <ng-template #abpHeader>
+
+    <div>
+      <h3>{{downloaded_File_Name}} has been downloaded to the set path.</h3>
+    </div>
+
+
+  </ng-template>
+
+
+</abp-modal>

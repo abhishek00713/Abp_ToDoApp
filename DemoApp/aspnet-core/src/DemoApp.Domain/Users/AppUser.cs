@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DemoApp.AppEntities;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -40,6 +42,7 @@ namespace DemoApp.Users
 
         public virtual bool PhoneNumberConfirmed { get; private set; }
 
+        public virtual ICollection<AssignedToUser> AssignedToUsers { get; set; }
 
         //Added by Chayan, the idea was to use AppUser as Foreign Key using Navigation Property
         //This derived property need to be notmapped for that to implement

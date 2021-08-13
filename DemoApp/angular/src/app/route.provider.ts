@@ -1,11 +1,42 @@
 import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { CurrentUserComponent } from '@abp/ng.theme.basic';
+
 import { APP_INITIALIZER } from '@angular/core';
+import { OAuthService} from 'angular-oauth2-oidc';
+
+
 
 export const APP_ROUTE_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService, OAuthService], multi: true },
 ];
 
-function configureRoutes(routesService: RoutesService) {
+function configureRoutes(routesService: RoutesService, oauthservice: OAuthService) {
+
+  var invis = false;
+ 
+  
+
+    
+    var role = localStorage.getItem('role');
+  if (role == 'user') {
+    localStorage.setItem('invis', 'true');
+      invis = true;
+      console.log("user invis", invis);
+      
+    }
+  else {
+    localStorage.setItem('invis', 'false');
+      invis = false;
+      console.log("invis", invis);
+    }
+    
+
+
+
+
+
+ 
+
   return () => {
     routesService.add([
       {
@@ -14,6 +45,7 @@ function configureRoutes(routesService: RoutesService) {
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
+        
       },
       {
         path: '/',
@@ -21,6 +53,7 @@ function configureRoutes(routesService: RoutesService) {
         iconClass: 'fa fa-cog ng-star-inserted',
         order: 2,
         layout: eLayoutType.application,
+        invisible: invis
       },
       {
         path: '/categories',

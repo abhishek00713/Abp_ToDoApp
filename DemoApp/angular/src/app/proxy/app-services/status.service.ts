@@ -31,6 +31,14 @@ export class StatusService {
     },
     { apiName: this.apiName });
 
+  getFullListByInput = (input: GetStatusListDto) =>
+    this.restService.request<any, PagedResultDto<StatusDto>>({
+      method: 'GET',
+      url: '/api/app/status/full-list',
+      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+
   getList = (input: GetStatusListDto) =>
     this.restService.request<any, PagedResultDto<StatusDto>>({
       method: 'GET',

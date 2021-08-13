@@ -2,6 +2,7 @@ import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 import type { CreateDefinitionAttachmentDto, DefinitionAttachmentDto, GetDefinitionAttachmentListDto, UpdateDefinitionAttachmentDto } from '../definition-attachment-dtos/models';
+import type { IBlobContainer } from '../volo/abp/blob-storing/models';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,7 @@ export class DefinitionAttachmentService {
     },
     { apiName: this.apiName });
 
-  saveBlobFile = (bytes: number[], fname: string) =>
+  saveBlobFile = (container: IBlobContainer, bytes: number[], fname: string) =>
     this.restService.request<any, void>({
       method: 'POST',
       url: '/api/app/definition-attachment/save-blob-file',

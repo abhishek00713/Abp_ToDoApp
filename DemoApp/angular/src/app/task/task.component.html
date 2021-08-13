@@ -29,7 +29,16 @@
     <div id="data-tables-table-filter" class="data-tables-filter">
       <div class="input-group">
         <!--<input type="search" class="form-control ng-pristine ng-valid ng-touched" placeholder="Search" ng-reflect-model="">-->
+
         <input type="text" class="form-control" placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
+        <button style="margin-right:8px" type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="clear()">
+          <i class="mr-1" ng-reflect-ng-class=""></i>
+          Clear
+        </button>
+        <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="search()">
+          <i class="mr-1" ng-reflect-ng-class=""></i>
+          Search
+        </button>
       </div>
     </div>
     <ngx-datatable [rows]="task.items  | filter:searchedKeyword" [count]="task.totalCount" [list]="list" default>

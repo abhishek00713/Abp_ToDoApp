@@ -11,8 +11,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppMigrationsDbContext))]
-    [Migration("20210614070509_initial_migration_14JUN21")]
-    partial class initial_migration_14JUN21
+    [Migration("20210711083056_added-after-chayan-branch-pull")]
+    partial class addedafterchayanbranchpull
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +20,7 @@ namespace DemoApp.Migrations
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DemoApp.AppEntities.AssignedToUser", b =>
@@ -75,12 +75,17 @@ namespace DemoApp.Migrations
                     b.Property<Guid>("ToDoId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ToDoId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ToDoId");
+
+                    b.HasIndex("ToDoId1");
 
                     b.HasIndex("UserId");
 
@@ -387,7 +392,87 @@ namespace DemoApp.Migrations
                     b.ToTable("Statuses");
                 });
 
-            modelBuilder.Entity("DemoApp.AppEntities.Task1", b =>
+            modelBuilder.Entity("DemoApp.AppEntities.ToDo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<Guid>("PriorityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("StatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PriorityId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("ToDos");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoTask", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -440,23 +525,24 @@ namespace DemoApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Task1s");
+                    b.ToTable("ToDoTask");
                 });
 
-            modelBuilder.Entity("DemoApp.AppEntities.ToDo", b =>
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoUserAttachment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssignedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AttachmentCaption")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CategoryId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AttachmentFile")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -471,9 +557,6 @@ namespace DemoApp.Migrations
                     b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnType("uniqueidentifier")
@@ -501,46 +584,75 @@ namespace DemoApp.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("PriorityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PriorityId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("StatusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("StatusId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TasksId")
+                    b.Property<Guid>("ToDOUserTaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ToDOUserTaskId");
 
-                    b.HasIndex("CategoryId1");
+                    b.ToTable("ToDoUserAttachments");
+                });
 
-                    b.HasIndex("PriorityId");
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoUserTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("PriorityId1");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<Guid>("StatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ToDoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("StatusId1");
+                    b.HasIndex("ToDoId");
 
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("ToDos");
+                    b.ToTable("ToDoUserTasks");
                 });
 
             modelBuilder.Entity("DemoApp.Users.AppUser", b =>
@@ -2526,6 +2638,10 @@ namespace DemoApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DemoApp.AppEntities.ToDo", null)
+                        .WithMany("AssignedToUsers")
+                        .HasForeignKey("ToDoId1");
+
                     b.HasOne("DemoApp.Users.AppUser", "AbpUser")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -2540,7 +2656,7 @@ namespace DemoApp.Migrations
             modelBuilder.Entity("DemoApp.AppEntities.DefinitionAttachment", b =>
                 {
                     b.HasOne("DemoApp.AppEntities.ToDo", "ToDos")
-                        .WithMany()
+                        .WithMany("DefinitionAttachments")
                         .HasForeignKey("ToDoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2550,45 +2666,29 @@ namespace DemoApp.Migrations
 
             modelBuilder.Entity("DemoApp.AppEntities.ToDo", b =>
                 {
-                    b.HasOne("DemoApp.AppEntities.Category", null)
-                        .WithMany()
+                    b.HasOne("DemoApp.AppEntities.Category", "Category")
+                        .WithMany("ToDos")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DemoApp.AppEntities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId1");
-
-                    b.HasOne("DemoApp.AppEntities.Priority", null)
-                        .WithMany()
+                    b.HasOne("DemoApp.AppEntities.Priority", "Priority")
+                        .WithMany("ToDos")
                         .HasForeignKey("PriorityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DemoApp.AppEntities.Priority", "Priority")
-                        .WithMany()
-                        .HasForeignKey("PriorityId1");
-
-                    b.HasOne("DemoApp.AppEntities.Status", null)
-                        .WithMany()
+                    b.HasOne("DemoApp.AppEntities.Status", "Status")
+                        .WithMany("ToDos")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DemoApp.AppEntities.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId1");
-
-                    b.HasOne("DemoApp.AppEntities.Task1", null)
-                        .WithMany()
+                    b.HasOne("DemoApp.AppEntities.ToDoTask", "Tasks")
+                        .WithMany("ToDos")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DemoApp.AppEntities.Task1", "Tasks")
-                        .WithMany()
-                        .HasForeignKey("TasksId");
 
                     b.Navigation("Category");
 
@@ -2597,6 +2697,30 @@ namespace DemoApp.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoUserAttachment", b =>
+                {
+                    b.HasOne("DemoApp.AppEntities.ToDoUserTask", null)
+                        .WithMany()
+                        .HasForeignKey("ToDOUserTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoUserTask", b =>
+                {
+                    b.HasOne("DemoApp.AppEntities.Status", null)
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DemoApp.AppEntities.ToDo", null)
+                        .WithMany()
+                        .HasForeignKey("ToDoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
@@ -2874,6 +2998,33 @@ namespace DemoApp.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.Category", b =>
+                {
+                    b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.Priority", b =>
+                {
+                    b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.Status", b =>
+                {
+                    b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.ToDo", b =>
+                {
+                    b.Navigation("AssignedToUsers");
+
+                    b.Navigation("DefinitionAttachments");
+                });
+
+            modelBuilder.Entity("DemoApp.AppEntities.ToDoTask", b =>
+                {
+                    b.Navigation("ToDos");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>

@@ -13,7 +13,7 @@ namespace DemoApp.AppEntities
         public string TaskName { get; set; }
         public virtual ICollection<ToDo> ToDos { get; set; }
 
-        public Task1()
+        public ToDoTask()
         {
             ToDos = new HashSet<ToDo>();
         }

@@ -1,10 +1,11 @@
 import { ListService, LIST_QUERY_DEBOUNCE_TIME, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { TaskDto } from '../proxy/task-dtos';
+import { GetTaskListDto, TaskDto } from '../proxy/task-dtos';
 import { TaskService } from '../proxy/app-services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import { HttpClient, HttpParams } from '@angular/common/http';
 @Component({
   providers: [
 
@@ -28,6 +29,7 @@ export class TaskComponent implements OnInit {
   selectedTask = {} as TaskDto;
   isModalOpen = false;
 
+
   constructor(private modalService: NgbModal,
     public readonly list: ListService,
     private taskService: TaskService,
@@ -38,16 +40,30 @@ export class TaskComponent implements OnInit {
 
   }
 
+  setPage(pageInfo) {
+   
+
+
+      const taskStreamCreator = (query) => this.taskService.getList(query);
+
+
+    
+
+      this.list.hookToQuery(taskStreamCreator).subscribe((response) => {
+
+        this.task = response;
+        console.log("tttaa", response);
+      });
+
+  
+
+
+  }
   ngOnInit() {
-    const taskStreamCreator = (query) => this.taskService.getList(query);
 
+    this.setPage({ offset: 0, limit: 10 });
 
-    this.list.hookToQuery(taskStreamCreator).subscribe((response) => {
-
-      this.task = response;
-    });
-
-
+ 
 
   }
 
@@ -81,6 +97,30 @@ export class TaskComponent implements OnInit {
     });
 
   }
+
+
+  clear() {
+    this.searchedKeyword = '';
+    this.list.get();
+  }
+
+  search() {
+    console.log("searched", this.searchedKeyword);
+    this.form = this.fb.group({
+      filter: [this.searchedKeyword, Validators.required],
+
+    });
+
+    this.taskService.getList(this.form.value).subscribe((response) => {
+
+      this.form.reset();
+      this.task = response;
+
+    });
+  }
+
+
+
   save() {
     if (this.form.invalid) {
       return;

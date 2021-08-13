@@ -6,7 +6,7 @@ import { NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-boots
 import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { FormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -16,7 +16,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     NgbTimepickerModule,
     DateTimePickerModule,
     Ng2SearchPipeModule,
-    FormsModule
+    FormsModule,
+    NgMultiSelectDropDownModule
 
   ],
   exports:[HomeComponent]
