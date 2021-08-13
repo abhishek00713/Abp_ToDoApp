@@ -7,7 +7,13 @@ using DemoApp.DTOs;
 using DemoApp.PriorityDtos;
 using DemoApp.StatusDtos;
 using DemoApp.TaskDtos;
+using DemoApp.ToDo_AssignedDtos;
 using DemoApp.ToDoDtos;
+using DemoApp.ToDoUserAttachmentDtos;
+using DemoApp.ToDoUserTaskDtos;
+using DemoApp.UserDtos;
+using DemoApp.Users;
+using Volo.Abp.Identity;
 
 namespace DemoApp
 {
@@ -15,6 +21,7 @@ namespace DemoApp
     {
         public DemoAppApplicationAutoMapperProfile()
         {
+            CreateMap<IdentityUser, IdentityUserDto>();
 
             CreateMap<Product, ProductDto>();
             CreateMap<CreateProductDto, Product>();
@@ -37,10 +44,13 @@ namespace DemoApp
             CreateMap<Priority, GetPriorityListDto>();
             CreateMap<UpdatePriorityDto, Priority>();
 
-            CreateMap<Task1, TaskDto>();
-            CreateMap<CreateTaskDto, Task1>();
-            CreateMap<Task1, GetTaskListDto>();
-            CreateMap<UpdateTaskDto, Task1>();
+            
+
+
+            CreateMap<ToDoTask, TaskDto>();
+            CreateMap<CreateTaskDto, ToDoTask>();
+            CreateMap<ToDoTask, GetTaskListDto>();
+            CreateMap<UpdateTaskDto, ToDoTask>();
 
 
             CreateMap<ToDo, ToDoDto>();
@@ -59,6 +69,20 @@ namespace DemoApp
             CreateMap<AssignedToUser, GetAssignedToUserListDto>();
             CreateMap<UpdateAssignedToUserDto, AssignedToUser>();
 
+
+
+            CreateMap<ToDoUserAttachment, ToDoUserAttachmentDto>();
+            CreateMap<CreateToDoUserAttachmentDto, ToDoUserAttachment>();
+            CreateMap<ToDoUserAttachment, GetToDoUserAttachmentListDto>();
+            CreateMap<UpdateToDoUserAtatchmentDto, ToDoUserAttachment>();
+
+
+            CreateMap<ToDoUserTask, ToDoUserTaskDto>();
+            CreateMap<CreateToDoUserTaskDto, ToDoUserTask>();
+            CreateMap<ToDoUserTask, GetToDoUserTaskListDto>();
+            CreateMap<UpdateToDoUserTaskDto, ToDoUserTask>();
+
+            CreateMap<AppUser, AbpUserDto>();
 
         }
     }

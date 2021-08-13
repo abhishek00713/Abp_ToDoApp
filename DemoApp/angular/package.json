@@ -13,13 +13,14 @@
   "private": true,
   "dependencies": {
     "@abp/ng.account": "~4.3.0",
-    "@abp/ng.components": "~4.3.0",
-    "@abp/ng.core": "~4.3.0",
+    "@abp/ng.components": "^4.3.3",
+    "@abp/ng.core": "^4.3.3",
     "@abp/ng.identity": "~4.3.0",
     "@abp/ng.setting-management": "~4.3.0",
     "@abp/ng.tenant-management": "~4.3.0",
     "@abp/ng.theme.basic": "~4.3.0",
     "@abp/ng.theme.shared": "~4.3.0",
+    "@angular-material-components/datetime-picker": "^2.0.4",
     "@angular/animations": "~11.1.0",
     "@angular/common": "~11.1.0",
     "@angular/compiler": "~11.1.0",
@@ -28,9 +29,12 @@
     "@angular/platform-browser": "~11.1.0",
     "@angular/platform-browser-dynamic": "~11.1.0",
     "@angular/router": "~11.1.0",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "@syncfusion/ej2-angular-calendars": "^19.2.44",
+    "ng-multiselect-dropdown": "^0.3.4",
+    "ng2-search-filter": "^0.5.1",
+    "rxjs": "^6.6.7",
+    "tslib": "^2.3.0",
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
     "@abp/ng.schematics": "~4.3.0",

@@ -31,6 +31,14 @@ export class CategoryService {
     },
     { apiName: this.apiName });
 
+  getFullListByInput = (input: GetCategoryListDto) =>
+    this.restService.request<any, PagedResultDto<CategoryDto>>({
+      method: 'GET',
+      url: '/api/app/category/full-list',
+      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+
   getList = (input: GetCategoryListDto) =>
     this.restService.request<any, PagedResultDto<CategoryDto>>({
       method: 'GET',

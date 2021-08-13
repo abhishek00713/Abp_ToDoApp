@@ -4,16 +4,20 @@
     "Menu:Home": "Home",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
-    "Menu:Settings": "Settings",
+    "TaskName": "Task Name",
+    "StatusName": "Status Name",
+    "Menu:task": "Task",
+    "Menu:priority": "Priority",
     "Menu:Category": "Category",
-    "Menu:Status": "Status",
-    "Menu:Priority": "Priority",
-    "Menu:Task": "Task",
-    "Menu:CreateToDo": "Create ToDos",
-    "Menu:CreateTasks": "Create Task",
-    "Actions": "Actions",
-    "Close": "Close",
-    "Delete": "Delete",
-    "Edit": "Edit"
+    "Menu:todo": "To-Do",
+    "Menu:status": "Status",
+    "NewStatus": "Create New status",
+    "NewCategory": "Create New category",
+    "NewTask": "Create New task",
+    "NewPriority": "Create New priority"
+    
+
+
+
   }
 }

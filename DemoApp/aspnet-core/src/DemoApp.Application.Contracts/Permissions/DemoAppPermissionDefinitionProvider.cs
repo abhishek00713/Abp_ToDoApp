@@ -6,7 +6,6 @@ namespace DemoApp.Permissions
 {
     public class DemoAppPermissionDefinitionProvider : PermissionDefinitionProvider
     {
-        //Defining Permission
         public override void Define(IPermissionDefinitionContext context)
         {
             var myGroup_define = context.AddGroup(DemoAppPermissions.GroupName_Define);
@@ -21,9 +20,6 @@ namespace DemoApp.Permissions
             demoAppPermission_user.AddChild(DemoAppPermissions.DemoApp.Create_User_ToDo, L("Create"));
             demoAppPermission_user.AddChild(DemoAppPermissions.DemoApp.Update_User_ToDo, L("Update"));
             demoAppPermission_user.AddChild(DemoAppPermissions.DemoApp.Delete_User_ToDo, L("Delete"));
-
-            //Define your own permissions here. Example:
-            //myGroup.AddPermission(DemoAppPermissions.MyPermission1, L("Permission:MyPermission1"));
         }
 
         private static LocalizableString L(string name)

@@ -1,6 +1,5 @@
 ﻿using DemoApp.AppEntities;
 using DemoApp.IAppServices;
-using DemoApp.Permissions;
 using DemoApp.TaskDtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -14,54 +13,99 @@ using Volo.Abp.Domain.Repositories;
 //Task
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class TaskAppService : DemoAppAppService, ITaskAppService
     {
-        private readonly IRepository<Task1, Guid> _taskRepository;
-        public TaskAppService(IRepository<Task1, Guid> taskRepository)
+        private readonly IRepository<ToDoTask, Guid> _taskRepository;
+        public TaskAppService(IRepository<ToDoTask, Guid> taskRepository)
         {
             _taskRepository = taskRepository;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
+        [Authorize]
         public async Task<TaskDto> CreateASync(CreateTaskDto input)
         {
-            Task1 tasks =
-            ObjectMapper.Map<CreateTaskDto, Task1>(input);
+            ToDoTask tasks =
+            ObjectMapper.Map<CreateTaskDto, ToDoTask>(input);
 
 
 
             var task = await _taskRepository.InsertAsync(tasks);
 
 
-            return ObjectMapper.Map<Task1, TaskDto>(task);
+            return ObjectMapper.Map<ToDoTask, TaskDto>(task);
         }
-        [Authorize(DemoAppPermissions.DemoApp.Delete_Define_ToDo)]
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             await _taskRepository.DeleteAsync(id);
         }
-
+        [Authorize]
         public async Task<TaskDto> GetAsync(Guid id)
         {
-            Task1 task = await _taskRepository.GetAsync(id);
+            ToDoTask task = await _taskRepository.GetAsync(id);
 
-            return ObjectMapper.Map<Task1, TaskDto>(task);
+            return ObjectMapper.Map<ToDoTask, TaskDto>(task);
 
         }
 
+        [Authorize]
+        public async Task<PagedResultDto<TaskDto>> GetFullList(GetTaskListDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(ToDoTask.TaskName);
+            }
+
+            List<ToDoTask> tasks = await _taskRepository.GetListAsync();
+
+            var totalcount = await AsyncExecuter.CountAsync(
+                _taskRepository.WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    Task => Task.TaskName.Contains(input.Filter)
+                    )
+                );
+
+
+
+            List<TaskDto> taskDtos =
+                ObjectMapper.Map<List<ToDoTask>, List<TaskDto>>(tasks);
+
+            PagedResultDto<TaskDto> result = new PagedResultDto<TaskDto>(
+                    totalcount, taskDtos
+                );
+
+
+
+            return result;
+
+        }
+
+        [Authorize]
         public async Task<PagedResultDto<TaskDto>> GetListAsync(GetTaskListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(Task1.TaskName);
+                input.Sorting = nameof(ToDoTask.TaskName);
             }
 
-            List<Task1> tasks = await _taskRepository.GetPagedListAsync(
 
-                input.SkipCount,
-                input.MaxResultCount,
-                input.Sorting
-                );
+            var taskList = _taskRepository
+           
+            .WhereIf(
+                !input.Filter.IsNullOrEmpty(),
+                p => p.TaskName.Contains(input.Filter) 
+          ).OrderBy(p => p.TaskName)
+          .Skip(input.SkipCount)
+            .Take(input.MaxResultCount)
+
+            .ToList(); ;
+
+            //List<ToDoTask> tasks = await _taskRepository.GetPagedListAsync(
+
+
+            //    input.SkipCount,
+            //    input.MaxResultCount,
+            //    input.Sorting
+            //    );
 
             var totalcount = await AsyncExecuter.CountAsync(
                 _taskRepository.WhereIf(
@@ -73,7 +117,7 @@ namespace DemoApp.AppServices
 
 
             List<TaskDto> taskDtos =
-                ObjectMapper.Map<List<Task1>, List<TaskDto>>(tasks);
+                ObjectMapper.Map<List<ToDoTask>, List<TaskDto>>(taskList);
 
             PagedResultDto<TaskDto> result = new PagedResultDto<TaskDto>(
                     totalcount, taskDtos
@@ -83,7 +127,7 @@ namespace DemoApp.AppServices
 
             return result;
         }
-        [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]
+        [Authorize]
         public async Task UpdateAsync(Guid id, UpdateTaskDto input)
         {
             var task = await _taskRepository.GetAsync(id);

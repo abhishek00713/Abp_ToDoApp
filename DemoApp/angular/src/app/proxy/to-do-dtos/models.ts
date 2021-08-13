@@ -1,4 +1,8 @@
 import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import type { CategoryDto } from '../category-dtos/models';
+import type { StatusDto } from '../status-dtos/models';
+import type { PriorityDto } from '../priority-dtos/models';
+import type { TaskDto } from '../task-dtos/models';
 
 export interface CreateToDoDto {
   categoryId: string;
@@ -23,13 +27,13 @@ export interface GetToDoListDto extends PagedAndSortedResultRequestDto {
 
 export interface ToDoDto extends EntityDto<string> {
   categoryId?: string;
-  category?: string;
+  category: CategoryDto;
   statusId?: string;
-  status?: string;
+  status: StatusDto;
   priorityId?: string;
-  priority?: string;
+  priority: PriorityDto;
   taskId?: string;
-  task?: string;
+  task: TaskDto;
   date?: string;
   assignedBy?: string;
   remarks?: string;

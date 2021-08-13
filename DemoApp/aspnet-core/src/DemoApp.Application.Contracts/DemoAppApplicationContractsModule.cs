@@ -35,11 +35,13 @@ namespace DemoApp
                 {
                     container.UseFileSystem(fileSystem =>
                     {
-                        fileSystem.BasePath = "E:\\Abp_ToDoApp\\DemoApp\\aspnet-core\\UploadedFiles";
-
+                    
+                        fileSystem.BasePath = "G:\\Angular_.NetCore_Study\\Sample\\Unzip\\DemoApp\\aspnet - core\\UploadedFiles\\";
+                    
                     });
                 });
             });
+
         }
     }
 }

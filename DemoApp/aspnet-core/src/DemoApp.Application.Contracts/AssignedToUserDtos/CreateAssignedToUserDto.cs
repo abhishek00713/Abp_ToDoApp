@@ -8,9 +8,9 @@ namespace DemoApp.AssignedToUserDtos
     public class CreateAssignedToUserDto
     {
         [Required]
-        public Guid UserId { get; set; }
+        public String UserId { get; set; }
         [Required]
-        public Guid ToDoId { get; set; }
+        public String ToDoId { get; set; }
         [Required]
         public bool IsActive { get; set; }
     }

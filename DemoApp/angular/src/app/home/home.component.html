@@ -1,333 +1,669 @@
-<div class="container">
-  <div class="p-5 text-center">
-    <div class="badge badge-success h5 rounded mb-4" role="alert">
-      <h5 class="m-1">
-        <i class="fas fa-rocket"></i> Congratulations, <strong>DemoApp</strong> is
-        successfully running!
-      </h5>
-    </div>
-    <h1>{{ '::Welcome' | abpLocalization }}</h1>
+<!--No login-->
+<div  *ngIf="is_not_logged_in">
+  <h1>You need to login to view the page. </h1>
+</div>
 
-    <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
+<!--User Pages-->
+<div *ngIf="is_userlogged_in">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          User Assigned ToDo
+        </h5>
 
-    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
-      ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
-    >
-  </div>
-  <div class="my-3 text-center">
-    <h3>Let's improve your application!</h3>
-    <p>Here are some links to help you get started:</p>
-  </div>
-  <div class="card mt-4 mb-5">
-    <div class="card-body">
-      <div class="row text-center justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Learn the ABP Framework',
-                description:
-                  'Explore the compherensive documentation to learn how to build a modern web application.',
-                links: [
-                  {
-                    href: 'https://docs.abp.io/en/abp/latest?ref=tmpl',
-                    label: 'See Documents'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Samples',
-                description: 'See the example projects built with the ABP Framework.',
-                links: [
-                  {
-                    href: 'https://docs.abp.io/en/abp/latest/Samples/Index?ref=tmpl',
-                    label: 'All samples'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'ABP Community',
-                description: 'Get involved with a vibrant community and become a contributor.',
-                links: [
-                  {
-                    href: 'https://community.abp.io/',
-                    label: 'Community'
-                  },
-                  {
-                    href: 'https://docs.abp.io/en/abp/latest/Contribution/Index?ref=tmpl',
-                    label: 'Contribute'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
       </div>
-      <div class="row text-center mt-lg-3 justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'ABP Blog',
-                description: 'Take a look at our recently published articles.',
-                links: [
-                  {
-                    href: 'https://blog.abp.io/abp?ref=tmpl',
-                    label: 'See Blog'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
+      <div class="text-right col col-md-6">
+        <div id="AbpContentToolbar" style="float : right">
+          <div class="col-auto px-1 pt-2 ng-star-inserted">
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="SearchModal()">
+              <i class="mr-1 fa fa-search" ng-reflect-ng-class="fa fa-search"></i>
+              Search
+            </button>
 
-        <ng-template #githubButtonsTemplate>
-          <p class="mb-1">
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp&amp;title=&amp;aria-label=Star%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star&amp;data-size=large&amp;data-show-count=true"
-              style="
-                width: 122px;
-                height: 28px;
-                border: none;
-                display: inline-block;
-                margin-right: 4px;
-              "
-            ></iframe>
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Fissues&amp;title=&amp;aria-label=Issue%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-issue-opened&amp;data-text=Issue&amp;data-size=large"
-              style="
-                width: 72px;
-                height: 28px;
-                border: none;
-                display: inline-block;
-                margin-right: 4px;
-              "
-            ></iframe>
+           
 
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Ffork&amp;title=&amp;aria-label=Fork%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-repo-forked&amp;data-text=Fork&amp;data-size=large&amp;"
-              style="width: 72px; height: 28px; border: none; display: inline-block"
-            ></iframe>
-          </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ngx-datatable [rows]="assigned_user_todo.items "
+                   [count]="assigned_user_todo.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   (page)="User_setPage($event)"
+                   default>
+
+      <ngx-datatable-column prop="Category ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+
+          {{ row.category?.categoryName}}
+
         </ng-template>
 
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Github',
-                description:
-                  'Do you love the ABP Framework? Please <strong>give a star</strong> to support it!',
-                links: [
-                  {
-                    href: 'https://github.com/abpframework/abp/issues/new?template=feature.md',
-                    label: 'Request a feature'
-                  }
-                ],
-                customTemplate: githubButtonsTemplate
-              }
-            }
-          "
-        ></ng-container>
+      </ngx-datatable-column>
 
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Stackoverflow',
-                description: 'See answers to previously asked questions or ask a new one.',
-                links: [
-                  {
-                    href: 'https://stackoverflow.com/questions/tagged/abp',
-                    label: 'Questions'
-                  },
-                  {
-                    href: 'https://stackoverflow.com/questions/ask',
-                    label: 'Ask a Question'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-      </div>
-    </div>
-  </div>
+      <ngx-datatable-column prop="Status ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.status?.statusName  }}
 
-  <div class="mt-5 my-3 text-center">
-    <h3>Meet the ABP Commercial</h3>
-    <p>A Complete Web Application Platform Built on the ABP Framework</p>
-  </div>
+        </ng-template>
 
-  <div class="card mt-4 mb-5">
-    <div class="card-body">
-      <p class="px-lg-5 mx-lg-5 py-3 text-center">
-        <a href="https://commercial.abp.io/" target="_blank">ABP Commercial</a> is a platform based
-        on the open source ABP framework. It provides pre-built application modules, rapid
-        application development tooling, professional UI themes, premium support and more.
-      </p>
+      </ngx-datatable-column>
 
-      <div class="row text-center justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'Startup Templates',
-                href: 'https://commercial.abp.io/startup-templates?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
+      <ngx-datatable-column prop="Priority ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.priority?.priorityName  }}
 
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'Application Modules',
-                href: 'https://commercial.abp.io/modules?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
+        </ng-template>
 
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'Developer<br />Tools',
-                href: 'https://commercial.abp.io/tools?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
+      </ngx-datatable-column>
 
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'UI<br />Themes',
-                href: 'https://commercial.abp.io/themes?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
+      <ngx-datatable-column prop="Task ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.task?.taskName  }}
 
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'Premium Support',
-                href: 'https://support.abp.io/QA/Questions?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
+        </ng-template>
 
-        <ng-container
-          *ngTemplateOutlet="
-            featuresTemplate;
-            context: {
-              $implicit: {
-                title: 'Additional Services',
-                href: 'https://commercial.abp.io/additional-services?ref=tmpl'
-              }
-            }
-          "
-        ></ng-container>
-      </div>
-    </div>
-  </div>
-  <div class="mb-5 text-center">
-    <p class="align-middle">
-      <a href="https://twitter.com/abpframework" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Framework</span></a
-      >
-      <a href="https://twitter.com/abpcommercial" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Commercial</span></a
-      >
-      <a href="https://github.com/abpframework/abp" target="_blank" class="mx-2"
-        ><i class="fa fa-github"></i><span class="text-secondary"> abpframework</span></a
-      >
-    </p>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Date ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.date  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Remarks">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.remarks  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+
+
+
+      <ngx-datatable-column prop="Action">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div style="width: 191.571px">
+           
+            <div ngbDropdown container="body" class="d-inline-block">
+
+
+
+              <button class="btn btn-primary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      ngbDropdownToggle>
+                <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+              </button>
+              <div ngbDropdownMenu>
+
+
+
+                <button ngbDropdownItem (click)="FileUploadModal(row.id)">
+                  Files
+                </button>
+
+               
+              </div>
+            </div>
+
+          </div>
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
   </div>
 </div>
 
-<ng-template #starterLinkTemplate let-context>
-  <div class="col-lg-4 border-left">
-    <div class="p-4">
-      <h5 class="mb-3">
-        <i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> {{ context.title }}
-      </h5>
-      <p [innerHTML]="context.description"></p>
-      <ng-container
-        *ngIf="context.customTemplate"
-        [ngTemplateOutlet]="context.customTemplate"
-      ></ng-container>
-      <a
-        *ngFor="let link of context.links"
-        [href]="link.href"
-        target="_blank"
-        class="btn btn-link px-1"
-        >{{ link.label }} <i class="fas fa-chevron-right"></i
-      ></a>
+<!--Admin Page-->
+<div class="card" *ngIf="is_adminlogged_in">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          {{ '::Menu:todo' | abpLocalization }}
+        </h5>
+
+      </div>
+      <div class="text-right col col-md-6">
+        <div id="AbpContentToolbar" style="float : right">
+          <div class="col-auto px-1 pt-2 ng-star-inserted">
+            <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="SearchModal()">
+              <i class="mr-1 fa fa-search" ng-reflect-ng-class="fa fa-search"></i>
+              Search
+            </button>
+
+            <button type="button" style="margin-left:10px" class="btn btn-primary btn-sm ng-star-inserted" (click)="createToDo()">
+              <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
+              New To-Do
+            </button>
+
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
-</ng-template>
+  <div class="card-body">
+    <ngx-datatable [rows]="todo.items "
+                   [count]="todo.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   (page)="setPage($event)"
+                   default>
 
-<ng-template #featuresTemplate let-context>
-  <div class="col-lg-2 border-left">
-    <div class="p-3">
-      <h6>
-        <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
-        <span [innerHTML]="context.title"></span>
-        <a [href]="context.href" target="_blank" class="d-block mt-2 btn btn-sm btn-link"
-          >Details <i class="fas fa-chevron-right"></i
-        ></a>
-      </h6>
-    </div>
+      <ngx-datatable-column prop="Category ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+
+          {{ row.category?.categoryName}}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Status ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.status?.statusName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Priority ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.priority?.priorityName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Task ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.task?.taskName  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Date ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.date  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Remarks">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.remarks  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+
+
+
+      <ngx-datatable-column prop="Action">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div style="width: 191.571px">
+            <div style="float:left; margin-right:4px">
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="UserList(row.id)">
+                <i class="mr-1 fa fa-user" ng-reflect-ng-class="fa fa-user"></i>
+
+              </button>
+
+            </div>
+            <div ngbDropdown container="body" class="d-inline-block">
+
+
+
+              <button class="btn btn-primary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      ngbDropdownToggle>
+                <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+              </button>
+              <div ngbDropdownMenu>
+
+
+
+                <button ngbDropdownItem (click)="FileUploadModal(row.id)">
+                  Add Files
+                </button>
+
+                <button ngbDropdownItem (click)="editToDo(row.id)">
+                  {{ '::Edit' | abpLocalization }}
+                </button>
+                <button ngbDropdownItem (click)="delete(row.id)">
+                  {{ '::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
   </div>
-</ng-template>
+</div>
 
-<style scoped>
-  .col-lg-2.border-left:nth-of-type(6n + 1) {
-    border-left: 0 !important;
-  }
 
-  .col-lg-4.border-left:nth-of-type(3n + 1) {
-    border-left: 0 !important;
-  }
 
-  @media (max-width: 991px) {
-    .border-left {
-      border-left: 0 !important;
-    }
-  }
-</style>
+
+
+
+<!--New Nad Edit TODO-->
+<abp-modal [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+    <h3>{{ (selectedToDo.id ? '::Edit' : '::NewToDo') | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <!--Category-->
+      <div class="form-group" style="margin-bottom:0px !important">
+        <label for="category">Category</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+
+      <select class="custom-select" formControlName="categoryid">
+        <option [ngValue]="null" disabled>Select Category</option>
+
+        <option *ngFor="let category of categorylist | keyvalue" [ngValue]="category.value.id">{{category.value.Name}}</option>
+      </select>
+
+      <!--Status-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="status">Status</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="statusid">
+        <option [ngValue]="null" disabled>Select Status</option>
+
+        <option *ngFor="let status of statuslist | keyvalue" [ngValue]="status.value.id">{{status.value.Name}}</option>
+      </select>
+
+      <!--Priority-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="priority">Priority</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="priorityid">
+        <option [ngValue]="null" disabled>Select Priority</option>
+
+        <option *ngFor="let priority of prioritylist | keyvalue" [ngValue]="priority.value.id">{{priority.value.Name}}</option>
+      </select>
+
+      <!--Task-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="task">Task</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="taskid">
+        <option [ngValue]="null" disabled>Select Task</option>
+
+        <option *ngFor="let task of tasklist | keyvalue" [ngValue]="task.value.id">{{task.value.Name}}</option>
+      </select>
+
+
+      <!--Date-->
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+
+
+
+        <label> Date</label><span> * </span>
+        <!--<input #datepicker="ngbDatepicker"
+         class="form-control"
+         name="datepicker"
+         formControlName="date"
+         ngbDatepicker
+         (click)="datepicker.toggle()" />-->
+
+        <ejs-datetimepicker id='datetimepicker' formControlName="date" placeholder='Select date and time ' format='yyyy.MM.dd HH:mm'></ejs-datetimepicker>
+
+
+
+      </div>
+
+      <!--Remarks-->
+      <div class="form-group">
+        <label for="remarks">Remarks</label><span> * </span>
+        <input type="text" id="remarks" class="form-control" formControlName="remarks" autofocus />
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+      <i class="fa fa-check mr-1"></i>
+      {{ '::Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+
+<!--Search-->
+<abp-modal [(visible)]="isSearchOpen">
+  <ng-template #abpHeader>
+    <h3>Search</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="search()">
+      <!--Category-->
+      <div class="form-group" style="margin-bottom:0px !important">
+        <label for="category">Category</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+
+      <select class="custom-select" formControlName="filterCategory">
+        <option [ngValue]="null" disabled>Select Category</option>
+
+        <option *ngFor="let category of categorylist | keyvalue" [ngValue]="category.value.Name">{{category.value.Name}}</option>
+      </select>
+
+      <!--Status-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="status">Status</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterStatus">
+        <option [ngValue]="null" disabled>Select Status</option>
+
+        <option *ngFor="let status of statuslist | keyvalue" [ngValue]="status.value.Name">{{status.value.Name}}</option>
+      </select>
+
+      <!--Priority-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="priority">Priority</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterPriority">
+        <option [ngValue]="null" disabled>Select Priority</option>
+
+        <option *ngFor="let priority of prioritylist | keyvalue" [ngValue]="priority.value.Name">{{priority.value.Name}}</option>
+      </select>
+
+      <!--Task-->
+
+      <div class="form-group" style="margin-top:.5rem ; margin-bottom:0px !important">
+        <label for="task">Task</label><span> * </span>
+        <!--<input type="text" id="author-name" class="form-control" formControlName="categoryName" autofocus />-->
+      </div>
+
+      <select class="custom-select" formControlName="filterTask">
+        <option [ngValue]="null" disabled>Select Task</option>
+
+        <option *ngFor="let task of tasklist | keyvalue" [ngValue]="task.value.Name">{{task.value.Name}}</option>
+      </select>
+
+
+
+
+
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="search()">
+      <i class="fa fa-check mr-1"></i>
+      Search
+    </button>
+  </ng-template>
+</abp-modal>
+
+<!--Add User-->
+<abp-modal [(visible)]="isUserModalOpen">
+  <ng-template #abpHeader>
+    <h3>Add User</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+
+
+    <div class="form-group">
+      <label for="User">User</label><span> * </span>
+
+    </div>
+
+    <div style="margin-bottom:20px !important">
+      <form [formGroup]="form">
+        <ng-multiselect-dropdown name="preselect"
+                                 [placeholder]="'Select uSER'"
+                                 [settings]="dropdownSettings"
+                                 [data]="dropdownList"
+                                 formControlName="preselect"
+                                 [disabled]="false"
+                                 (onFilterChange)="onFilterChange($event)"
+                                 (onDropDownClose)="onDropDownClose($event)"
+                                 (onSelect)="onItemSelect($event)"
+                                 (onDeSelect)="onDeSelect($event)"
+                                 (onSelectAll)="onSelectAll($event)"
+                                 (onDeSelectAll)="onDeSelectAll($event)">
+        </ng-multiselect-dropdown>
+      </form>
+
+    </div>
+
+
+
+
+
+
+
+
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" (click)="closeDropdown()">
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="saveUser()">
+      <i class="fa fa-check mr-1"></i>
+      Save
+    </button>
+  </ng-template>
+
+
+</abp-modal>
+
+
+<!--File Upload-->
+
+<abp-modal [(visible)]="isFileUpload">
+  <ng-template #abpHeader>
+    <div style="text-align:center; margin-top: 20px;">
+      <h4>
+        File
+      </h4>
+    </div>
+
+  </ng-template>
+
+  <ng-template #abpBody>
+
+    <div *ngIf="is_adminlogged_in">
+      <i class="fa fa-plus fa-2x" style="cursor: pointer; color: darkslateblue;" (click)="addFile()"></i>  Add new files
+      <input style="display: none;" type="file" id="fileUpload" #selectedFile [(ngModel)]="fileUpload" (click)="selectedFile.value = null" value="" (change)="handleFileInput($event.target.files)" />
+      <pre id="file"></pre>
+    </div>
+   
+    <table style="margin-top: 20px;">
+      <tr>
+        <th class="column1">Uploaded Files</th>
+        <th class="column2" style="text-align:center;">Download</th>
+        <th class="column3" style="text-align:center;">Delete</th>
+      </tr>
+      <tr *ngFor="let file of files">
+        <td class="column1">{{file.caption}}</td>
+        <td class="column2" style="text-align:center;cursor: pointer;" (click)="downloadFile(file.fileName,file.caption)"><i class="fa fa-download"></i></td>
+        <td class="column3" style="text-align:center;cursor: pointer;" (click)="deleteFile(file.fileName)"><i class="mr-1 fa fa-trash" ng-reflect-ng-class="fa fa-user"></i></td>
+
+      </tr>
+    </table>
+
+
+
+  </ng-template>
+
+  <ng-template #abpFooter>
+
+
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+  </ng-template>
+
+</abp-modal>
+
+
+<!--UserList-->
+<abp-modal [(visible)]="isUserListOpen">
+  <ng-template #abpHeader>
+    <h3>User List</h3>
+
+  </ng-template>
+
+  <ng-template #abpBody>
+
+    <div>
+      <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="AddUser()">
+        <i class="mr-1 fa fa-plus" ng-reflect-ng-class="fa fa-plus"></i>
+        Add User
+      </button>
+
+    </div>
+    <ngx-datatable [rows]="selected_todo_user_list.items "
+                   [count]="selected_todo_user_list.totalCount" [list]="list"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   rowHeight="auto"
+                   [limit]="10"
+                   [columnMode]="'force'"
+                   default>
+
+
+
+      <ngx-datatable-column prop="Full Name ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.name  }}
+          {{ row.surname  }}
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+
+      <ngx-datatable-column prop="Email ">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.email  }}
+
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="User Name">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.userName  }}
+
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+      <ngx-datatable-column prop="Action">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div style="width: 191.571px">
+            <div style="float:left; margin-right:4px">
+              <button type="button" class="btn btn-primary btn-sm ng-star-inserted" (click)="DeleteUser(row.id)">
+                <i class="mr-1 fa fa-trash" ng-reflect-ng-class="fa fa-user"></i>
+
+              </button>
+
+            </div>
+
+
+          </div>
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+  </ng-template>
+
+  <ng-template #abpFooter>
+
+
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+
+
+
+<!--Download Finish-->
+<abp-modal [(visible)]="isDownloadFinish">
+
+
+  <ng-template #abpHeader>
+
+    <div>
+      <h3>{{downloaded_File_Name}} has been downloaded to the set path.</h3>
+    </div>
+
+
+  </ng-template>
+
+
+</abp-modal>

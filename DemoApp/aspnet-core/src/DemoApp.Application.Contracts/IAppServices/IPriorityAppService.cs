@@ -12,6 +12,8 @@ namespace DemoApp.IAppServices
     {
         Task<PriorityDto> GetAsync(Guid id);
         Task<PagedResultDto<PriorityDto>> GetListAsync(GetPriorityListDto input);
+
+        Task<PagedResultDto<PriorityDto>> GetFullList(GetPriorityListDto input);
         Task<PriorityDto> CreateASync(CreatePriorityDto input);
         Task UpdateAsync(Guid id, UpdatePriorityDto input);
         Task DeleteAsync(Guid id);

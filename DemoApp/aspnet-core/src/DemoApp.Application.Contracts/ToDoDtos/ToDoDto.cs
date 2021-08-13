@@ -20,6 +20,7 @@ namespace DemoApp.ToDoDtos
         public PriorityDto Priority { get; set; }
         public Guid TaskId { get; set; }
         public TaskDto Task { get; set; }
+
         public DateTime Date { get; set; }
         public Guid AssignedBy { get; set; }
         public string Remarks { get; set; }

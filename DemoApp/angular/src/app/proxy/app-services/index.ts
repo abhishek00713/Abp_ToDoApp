@@ -6,4 +6,7 @@ export * from './priority.service';
 export * from './product.service';
 export * from './status.service';
 export * from './task.service';
+export * from './to-do-assigned.service';
+export * from './to-do-user-attachment.service';
+export * from './to-do-user-task.service';
 export * from './to-do.service';

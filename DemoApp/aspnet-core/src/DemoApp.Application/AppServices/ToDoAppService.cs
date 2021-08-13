@@ -2,7 +2,10 @@
 using DemoApp.IAppServices;
 using DemoApp.Permissions;
 using DemoApp.ToDoDtos;
+using DemoApp.UserDtos;
+using DemoApp.Users;
 using Microsoft.AspNetCore.Authorization;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +13,42 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
+using Volo.Abp.ObjectMapping;
 
 namespace DemoApp.AppServices
 {
-    [Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
+    //[Authorize(DemoAppPermissions.DemoApp.Default_Define_ToDo)]
     public class ToDoAppService : DemoAppAppService, IToDoAppService
     {
         private readonly IRepository<ToDo, Guid> _todoRepository;
-        public ToDoAppService(IRepository<ToDo, Guid> todoRepository)
+
+        private readonly IRepository<AppUser, Guid> _userRepository;
+
+        private readonly IRepository<Volo.Abp.Identity.IdentityRole, Guid> _roleRepository;
+
+        private readonly IdentityUserManager UserManager;
+
+        
+
+
+
+
+
+        public ToDoAppService(IRepository<AppUser, Guid> userRepository, IRepository<ToDo, Guid> todoRepository
+                                , IRepository<Volo.Abp.Identity.IdentityRole, Guid> roleRepository
+                                , IdentityUserManager userManager
+            )
         {
+            _userRepository = userRepository;
             _todoRepository = todoRepository;
+            _roleRepository = roleRepository;
+            UserManager = userManager;
+
+            
         }
+
+
         [Authorize(DemoAppPermissions.DemoApp.Create_Define_ToDo)]
         public async Task<ToDoDto> CreateASync(CreateToDoDto input)
         {
@@ -95,39 +123,81 @@ namespace DemoApp.AppServices
             return ObjectMapper.Map<ToDo, ToDoDto>(toDo);
         }
 
+        public string GetCurrentUserRole()
+        {
+            var role = CurrentUser.Roles[0];
+            return role;
+        }
+
         public async Task<PagedResultDto<ToDoDto>> GetListAsync(GetToDoListDto input)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(ToDoDto.Date);
+                input.Sorting = nameof(ToDo.Date);
             }
 
-            List<ToDo> todos = await _todoRepository.GetPagedListAsync(
 
-                input.SkipCount,
-                input.MaxResultCount,
-                input.Sorting
-                );
+            var todoList = _todoRepository
+
+            .WhereIf(
+                !input.Filter.IsNullOrEmpty(),
+                p => p.Remarks.Contains(input.Filter)
+          ).OrderBy(p => p.Date)
+          .Skip(input.SkipCount)
+            .Take(input.MaxResultCount)
+
+            .ToList(); ;
+
+            //List<ToDoTask> tasks = await _taskRepository.GetPagedListAsync(
+
+
+            //    input.SkipCount,
+            //    input.MaxResultCount,
+            //    input.Sorting
+            //    );
 
             var totalcount = await AsyncExecuter.CountAsync(
                 _todoRepository.WhereIf(
                     !input.Filter.IsNullOrWhiteSpace(),
-                    ToDo => ToDo.Remarks.Contains(input.Filter)
+                    todo => todo.Remarks.Contains(input.Filter)
                     )
                 );
 
 
 
-            List<ToDoDto> toDos =
-                ObjectMapper.Map<List<ToDo>, List<ToDoDto>>(todos);
+            List<ToDoDto> todoDtos =
+                ObjectMapper.Map<List<ToDo>, List<ToDoDto>>(todoList);
 
             PagedResultDto<ToDoDto> result = new PagedResultDto<ToDoDto>(
-                    totalcount, toDos
+                    totalcount, todoDtos
                 );
 
 
 
             return result;
+        }
+
+        public async Task<IList<IdentityUserDto>> GetUserList(GetToDoListDto input)
+        {
+            var user = CurrentUser;
+            
+
+            var usersOfRole = await UserManager.GetUsersInRoleAsync("user");
+
+            IList<IdentityUserDto> retu = new List<IdentityUserDto>();
+
+            foreach(IdentityUser i in usersOfRole)
+            {
+                retu.Add(ObjectMapper.Map<IdentityUser, IdentityUserDto>(i));
+
+            }
+
+            
+
+           
+
+            return retu;
+
         }
 
         [Authorize(DemoAppPermissions.DemoApp.Update_Define_ToDo)]

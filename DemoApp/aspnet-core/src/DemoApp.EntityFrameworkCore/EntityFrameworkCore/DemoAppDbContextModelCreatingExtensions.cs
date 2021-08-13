@@ -64,9 +64,9 @@ namespace DemoApp.EntityFrameworkCore
 
             });
 
-            builder.Entity<Task1>(b =>
+            builder.Entity<ToDoTask>(b =>
             {
-                b.ToTable("Task1s");
+                b.ToTable("ToDoTask");
                 b.ConfigureByConvention();
                 b.Property(i => i.TaskName).IsRequired().HasMaxLength(100);
             });
@@ -80,7 +80,7 @@ namespace DemoApp.EntityFrameworkCore
                 b.Property(i => i.FileName).IsRequired().HasMaxLength(100);
 
                 //relationship with ToDo Schema Table
-                b.HasOne(i => i.ToDos).WithMany().HasForeignKey(t => t.ToDoId);
+                b.HasOne(i => i.ToDos).WithMany(j=>j.DefinitionAttachments).HasForeignKey(t => t.ToDoId);
             });
 
             builder.Entity<AssignedToUser>(b =>
@@ -106,15 +106,32 @@ namespace DemoApp.EntityFrameworkCore
 
                 b.HasOne<Category>(td => td.Category).WithMany(c => c.ToDos).HasForeignKey(i => i.CategoryId).IsRequired();
                 b.HasOne<Priority>(td => td.Priority).WithMany(p => p.ToDos).HasForeignKey(i => i.PriorityId).IsRequired();
-                b.HasOne<Task1>(td => td.Tasks).WithMany(t => t.ToDos).HasForeignKey(i => i.TaskId).IsRequired();
+                b.HasOne<ToDoTask>(td => td.Tasks).WithMany(t => t.ToDos).HasForeignKey(i => i.TaskId).IsRequired();
                 b.HasOne<Status>(td => td.Status).WithMany(s => s.ToDos).HasForeignKey(i => i.StatusId).IsRequired();
             });
 
 
+            builder.Entity<ToDoUserTask>(b =>
+            {
+                b.ToTable("ToDoUserTasks");
+                b.ConfigureByConvention();
+                b.HasOne<ToDo>().WithMany().HasForeignKey(i => i.ToDoId).OnDelete(DeleteBehavior.Restrict).IsRequired(); 
+                b.HasOne<Status>().WithMany().HasForeignKey(i => i.StatusId).OnDelete(DeleteBehavior.Restrict).IsRequired(); 
+            });
+
+            builder.Entity<ToDoUserAttachment>(b =>
+            {
+                b.ToTable("ToDoUserAttachments");
+                b.ConfigureByConvention();
+                b.HasOne<ToDoUserTask>().WithMany().HasForeignKey(i => i.ToDOUserTaskId).IsRequired();
+                b.Property(i => i.AttachmentCaption).IsRequired().HasMaxLength(100);
+                b.Property(i => i.AttachmentFile).IsRequired().HasMaxLength(100);
+            });
+
 
             var cascadeFks = builder.Model.GetEntityTypes().
-                SelectMany(t => t.GetForeignKeys())
-                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+               SelectMany(t => t.GetForeignKeys())
+               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
             foreach (var fk in cascadeFks)
                 fk.DeleteBehavior = DeleteBehavior.Cascade;
 

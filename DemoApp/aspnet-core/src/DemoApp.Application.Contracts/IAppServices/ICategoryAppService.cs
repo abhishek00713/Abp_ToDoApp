@@ -12,8 +12,10 @@ namespace DemoApp.IAppServices
     {
         Task<CategoryDto> GetAsync(Guid id);
         Task<PagedResultDto<CategoryDto>> GetListAsync(GetCategoryListDto input);
+        Task<PagedResultDto<CategoryDto>> GetFullList(GetCategoryListDto input);
         Task<CategoryDto> CreateASync(CreateCategoryDto input);
         Task UpdateAsync(Guid id, UpdateCategoryDto input);
         Task DeleteAsync(Guid id);
+
     }
 }

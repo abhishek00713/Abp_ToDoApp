@@ -10,9 +10,9 @@ namespace DemoApp.DefinitionAttachmentDtos
         [Required]
         public Guid ToDoId { get; set; }
         [Required]
-        public string Caption { get; set; }        
+        public string Caption { get; set; }
         public Guid FileName { get; set; }
         [Required]
-        public byte[] BinaryFile { get; set; }
+        public string BinaryFile { get; set; }
     }
 }
